@@ -12,7 +12,7 @@
                 <SearchInput />
                 <SearchInput />
                 <SearchInput />
-                <NSelect size="tiny" :options="options" v-model:value="value"
+                <NSelect size="tiny" :options="options" v-model="value"
                     style="max-width: 160px; min-width: 160px;" />
             </div>
             <div class="flex">

@@ -1,41 +1,79 @@
 <template>
-    <div class="flex ">
-        <NMenu class="w-56" :options="MenuOptions" />
-        <div class="p-2 w-full">
-            <slot></slot>
-        </div>
+    <div class="flex min-h-screen">
+        <NMenu class="w-56 h-screen sticky top-0" :options="menuOptions" v-model:value="activeKey"
+            @update:value="handleMenuSelect" />
+
+        <main class="flex-1 overflow-auto">
+            <router-view />
+        </main>
     </div>
-
-
 </template>
-<script setup lang='ts'>
-import { NMenu } from 'naive-ui';
-import { keep } from 'naive-ui/es/_utils';
 
-import { computed } from 'vue';
-const MenuOptions = computed(() => [
+<script setup lang="ts">
+import { NMenu } from 'naive-ui';
+import { ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+
+const router = useRouter();
+const route = useRoute();
+
+interface RouteMeta {
+    menuKey?: string;
+}
+
+const activeKey = ref<string>((route.meta as RouteMeta).menuKey || 'home');
+
+const menuOptions = [
     {
-        label: 'Меню',
-        key: '1',
+        label: 'Главная',
+        key: 'home',
+        route: { name: 'events' }
     },
     {
-        label: `Управление файлами`,
-        key: `2`,
+        label: 'Управление файлами',
+        key: 'files',
         children: [
             {
-                label: `Активные файлы`,
-                key: `3`
+                label: 'Активные файлы',
+                key: 'active-files',
+                route: { name: 'active-files' }
             },
             {
-                label: `Архив`,
-                key: `4`
-            },
-            {
-                label: `Детали файла`,
-                key: `5`
-            },
+                label: 'Архив',
+                key: 'archive',
+                route: { name: 'archive' }
+            }
         ]
     }
-])
+];
+
+const handleMenuSelect = (key: string) => {
+    const findRoute = (options: any[]): any => {
+        for (const item of options) {
+            if (item.key === key && item.route) return item;
+            if (item.children) {
+                const found = findRoute(item.children);
+                if (found) return found;
+            }
+        }
+        return null;
+    };
+
+    const target = findRoute(menuOptions);
+    if (target?.route) router.push(target.route);
+};
+
+watch(
+    () => (route.meta as RouteMeta).menuKey,
+    (newKey) => {
+        if (newKey) activeKey.value = newKey;
+    },
+    { immediate: true }
+);
 </script>
-<style scoped></style>
+
+<style scoped>
+.sticky {
+    position: sticky;
+}
+</style>

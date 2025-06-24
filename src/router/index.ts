@@ -1,7 +1,45 @@
+import { createRouter, createWebHistory } from "vue-router";
+import Layout from "../Layout/Layout.vue";
+import EventLogPage from "../pages/EventLogPage.vue";
+
 const routes = [
-    {
-        path: '/',
-        name: 'Home',
-    
-    }
-]
+  {
+    path: "/",
+    component: Layout,
+    redirect: "/events",
+    children: [
+      {
+        path: "/events",
+        name: "events",
+        component: EventLogPage,
+        meta: {
+          title: "Журнал событий",
+          menuKey: "home",
+        },
+      },
+      {
+        path: "/active-files",
+        name: "active-files",
+        component: EventLogPage,
+        meta: {
+          menuKey: "active-files",
+        },
+      },
+      {
+        path: "/archive",
+        name: "archive",
+        component: EventLogPage,
+        meta: {
+          menuKey: "archive",
+        },
+      },
+    ],
+  },
+];
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes,
+});
+
+export default router;
