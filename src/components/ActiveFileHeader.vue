@@ -2,10 +2,8 @@
     <div class="w-full">
         <NButtonGroup class="">
             <NButton size="small"> Детали </NButton>
-            <NButton size="small"> Экспортировать
-            </NButton>
-            <NButton size="small"> Архивировать
-            </NButton>
+            <NButton size="small"> Экспортировать </NButton>
+            <NButton size="small"> Архивировать </NButton>
         </NButtonGroup>
         <div class="flex gap-8">
             <div class="flex gap-3.5 items-center">
@@ -44,17 +42,14 @@
                 </div>
             </div>
         </div>
-
     </div>
 </template>
-<script setup>
-import { NButton, NButtonGroup, NCard, NDatePicker, NInput, NInputGroup, NSelect } from 'naive-ui';
-import SearchIcon from './Icons/SearchIcon.vue';
+
+<script setup lang="ts">
+import { NButton, NButtonGroup, NDatePicker, NSelect } from 'naive-ui';
 import SearchInput from './UI/SearchInput.vue';
 import { reactive } from 'vue';
-import { useSearchStore } from '../store/searhStore';
 
-const searchStore = useSearchStore()
 const searchFields = reactive({
     fileName: '',
     user: '',
@@ -67,12 +62,9 @@ const searchParams = () => {
     const queryString = new URLSearchParams(params).toString()
     console.log(queryString)
 }
-const handleSearchInput = (field, value) => {
-    searchStore.updateField(field, value)
-    // searchFields[field] = value;
-    // console.log(`${field} changed:`, value);
-    // searchParams();
+const handleSearchInput = (field: keyof typeof searchFields, value: string) => {
+    searchFields[field] = value;
+    console.log(`${field} changed:`, value);
+    searchParams();
 };
-
-const options = [{}]
 </script>

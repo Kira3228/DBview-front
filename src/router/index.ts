@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Layout from "../Layout/Layout.vue";
 import EventLogPage from "../pages/EventLogPage.vue";
+import ActiveFilePage from "../pages/ActiveFilePage.vue";
 
 const routes = [
   {
@@ -20,7 +21,7 @@ const routes = [
       {
         path: "/active-files",
         name: "active-files",
-        component: EventLogPage,
+        component: ActiveFilePage,
         meta: {
           menuKey: "active-files",
         },

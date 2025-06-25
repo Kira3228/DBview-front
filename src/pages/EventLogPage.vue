@@ -5,6 +5,7 @@ import type { TSystemEventResponse } from '../utils/Types/SystemEvent.types';
 import Table from '../components/Table.vue';
 import EventLogHeader from '../components/EventLogHeader.vue';
 import { NConfigProvider } from 'naive-ui';
+import { useSearchStore } from '../store/searhStore';
 
 const responseData = ref<TSystemEventResponse>({
     data: [],
@@ -14,15 +15,19 @@ const responseData = ref<TSystemEventResponse>({
 });
 
 const currentPage = ref(1);
-const pageSize = ref(30);
+const pageSize = ref(5);
 const error = ref(false);
 const isLoading = ref(false);
-
+const searchStore = useSearchStore()
 const fetchEvents = async () => {
     try {
         isLoading.value = true;
         const result: TSystemEventResponse = await fetchData(
-            `http://localhost:3000/system-event/?page=${currentPage.value}&limit=${pageSize.value}`
+            `http://localhost:3000/system-event/?page=${currentPage
+                .value}&limit=${pageSize
+                    .value}&fileName=${searchStore
+                        .fileName}&user${searchStore.user}&mni=${searchStore
+                            .mni}`
         );
 
         responseData.value = {
