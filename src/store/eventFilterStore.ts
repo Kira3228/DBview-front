@@ -1,23 +1,20 @@
 import { defineStore } from "pinia";
-export interface SearchState {
-  eventType: string;
-  timestamp: Date;
-  status: string;
-  filePath: string;
-  page: number;
-  limit?: number;
+interface filterStatr {
+  fileName: string;
+  user: string;
+  mni: string;
 }
 export const useSearchStore = defineStore(`search`, {
   state: (): SearchState => ({
-    filePath: ``,
-    timestamp: Date()
-    filePath: ``,
-    status: ``,
-    page: 1,
+    fileName: ``,
+    user: ``,
+    mni: ``,
   }),
   actions: {
     updateField(field: keyof SearchState, value: string) {
       this[field] = value;
+      
+      
     },
   },
 });

@@ -23,11 +23,7 @@ const fetchEvents = async () => {
     try {
         isLoading.value = true;
         const result: TSystemEventResponse = await fetchData(
-            `http://localhost:3000/system-event/?page=${currentPage
-                .value}&limit=${pageSize
-                    .value}&fileName=${searchStore
-                        .fileName}&user${searchStore.user}&mni=${searchStore
-                            .mni}`
+            `http://localhost:3000/system-event/?page=${}`
         );
 
         responseData.value = {

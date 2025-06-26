@@ -4,6 +4,7 @@ import SearchIcon from '../Icons/SearchIcon.vue';
 
 const props = defineProps<{
     modelValue: string;
+    placeholder?: string
 }>();
 
 const emits = defineEmits<{
@@ -13,8 +14,8 @@ const emits = defineEmits<{
 
 <template>
     <NInputGroup>
-        <NInput :value="modelValue" @update:value="emits('update:modelValue', $event)" size="tiny" autosize
-            class="w-36" />
+        <NInput :placeholder="props.placeholder" :value="modelValue" @update:value="emits('update:modelValue', $event)"
+            size="tiny" autosize class="w-36" />
         <NButton size="tiny">
             <template #icon>
                 <SearchIcon />
