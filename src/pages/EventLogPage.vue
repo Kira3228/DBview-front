@@ -5,7 +5,7 @@ import type { TSystemEventResponse } from '../utils/Types/SystemEvent.types';
 import Table from '../components/Table.vue';
 import EventLogHeader from '../components/EventLogHeader.vue';
 import { NConfigProvider } from 'naive-ui';
-import { useSearchStore } from '../store/searhStore';
+import { useSearchStore } from '../store/searchStore';
 
 const responseData = ref<TSystemEventResponse>({
     data: [],
@@ -23,7 +23,7 @@ const fetchEvents = async () => {
     try {
         isLoading.value = true;
         const result: TSystemEventResponse = await fetchData(
-            `http://localhost:3000/system-event/?page=${}`
+            `http://localhost:3000/system-event/`
         );
 
         responseData.value = {

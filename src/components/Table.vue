@@ -3,7 +3,8 @@
         <NDataTable ref="table" :columns="columns" :data="data" :bordered="true"
             :row-key="(row: TSystemEvent) => row.id" class="shadow-sm" />
         <div class="mt-6 flex justify-center">
-            <NPagination :page="currentPage" :item-count="props.total" :page-size="pageSize" :page-count="totalPages"
+            <NPagination :page="currentPage" :item-count="props.total" :page-size="pageSize" 
+            :page-count="totalPages"
                 @update:page="handlePageChange" show-quick-jumper>
                 <template #prev>
                     <NButton>Previous</NButton>
