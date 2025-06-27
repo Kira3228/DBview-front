@@ -6,13 +6,15 @@ import Table from "../components/Table.vue";
 import EventLogHeader from "../components/EventLogHeader.vue";
 import { NConfigProvider } from "naive-ui";
 import { useSearchStore } from "../store/searchStore";
-import EventLog from "./utils/Types/EventLog.ts";
-const responseData = <EventLog>{
-  data: [],
+import type { EventLog } from "../utils/Types/EventLog.ts";
+
+const responseData = ref<EventLog>({
+  events: [],
+  limit: 30,
   page: 1,
-  total: 0,
-  totalPages: 1,
-};
+  totalCount: 0,
+  totalPages: 0,
+});
 
 const currentPage = ref(1);
 const pageSize = ref(5);
@@ -22,15 +24,16 @@ const searchStore = useSearchStore();
 const fetchEvents = async () => {
   try {
     isLoading.value = true;
-    const result: TSystemEventResponse = await fetchData(
-      `http://localhost:3000/system-log/getFilteredSystemLog`
+    const result: EventLog = await fetchData(
+      `http://localhost:3000/system-log/getFilteredSystemLog/?filePath=${searchStore.state.filePath}&`
     );
 
     responseData.value = {
-      events: result.data || [],
-      total: result.total || 0,
+      events: result.events || [],
       page: result.page || 1,
       totalPages: result.totalPages || 1,
+      limit: result.limit || 30,
+      totalCount: result.totalCount || 0
     };
   } catch (err) {
     error.value = true;
@@ -48,14 +51,9 @@ watch(currentPage, fetchEvents);
   <NConfigProvider>
     <div class="flex w-full flex-col p-4">
       <EventLogHeader />
-      <Table
-        :data="responseData.data"
-        :current-page="currentPage"
-        :total="responseData.total"
-        :page-size="pageSize"
-        :total-pages="responseData.totalPages"
-        @update:page="(newPage) => (currentPage = newPage)"
-      />
+      <Table :data="responseData.events" :current-page="currentPage" :total="responseData.totalPages"
+        :page-size="pageSize" :total-pages="responseData.totalPages"
+        @update:page="(newPage) => (currentPage = newPage)" />
     </div>
   </NConfigProvider>
 </template>

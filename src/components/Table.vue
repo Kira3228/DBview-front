@@ -3,8 +3,7 @@
         <NDataTable ref="table" :columns="columns" :data="data" :bordered="true"
             :row-key="(row: TSystemEvent) => row.id" class="shadow-sm" />
         <div class="mt-6 flex justify-center">
-            <NPagination :page="currentPage" :item-count="props.total" :page-size="pageSize" 
-            :page-count="totalPages"
+            <NPagination :page="currentPage" :item-count="props.total" :page-size="pageSize" :page-count="totalPages"
                 @update:page="handlePageChange" show-quick-jumper>
                 <template #prev>
                     <NButton>Previous</NButton>
@@ -19,11 +18,12 @@
 <script setup lang="ts">
 import { NButton, NDataTable, NPagination, type DataTableColumn } from 'naive-ui';
 import type { TSystemEvent } from '../utils/Types/SystemEvent.types';
+import type { EventLog } from '../utils/Types/EventLog';
 
 
 const props = defineProps<
     {
-        data: TSystemEvent[]
+        data: EventLog[]
         currentPage: number
         total: number
         pageSize: number
@@ -37,12 +37,13 @@ const emit = defineEmits<{
 const handlePageChange = (page: number) => {
     emit('update:page', page);
 };
-const columns: DataTableColumn<TSystemEvent>[] = [
+const columns: DataTableColumn<EventLog>[] = [
     { title: 'ID', key: 'id', width: 80 },
-    { title: 'Timestamp', key: 'timestamp' },
-    { title: 'Type', key: 'eventType' },
-    { title: 'Severity', key: 'severity' },
+    { title: 'Type', key: 'eventType', resizable: true },
+    { title: "Name", key: `relatedFileId[fileName]`, resizable: true },
+    { title: "Path", key: `relatedFileId[filePath]`, resizable: true },
+    { title: "Status", key: `relatedFileId[status]`, resizable: true },
+    { title: 'Timestamp', key: 'timestamp', resizable: true },
     { title: 'Source', key: 'source', resizable: true, },
-    { title: 'Data', key: 'eventData', ellipsis: { tooltip: true } }
 ];
 </script>
