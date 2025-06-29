@@ -1,28 +1,29 @@
 export type EventLog = {
-  events: Event[];
-  totalCount: number;
-  page: number;
-  totalPages: number;
-  limit: number;
-};
+	events: Event[]
+	totalCount: number
+	page: number
+	totalPages: number
+	limit: number
+}
 
-type Event = {
-  id: number;
-  eventType: string;
-  source: string;
-  timestamp: Date;
-  relatedFileId: relatedFile;
-  relatedProcessId: relatedProcess;
-};
+export type Event = {
+	id: number
+	eventType: string
+	source: string
+	timestamp: Date
+	relatedFileId: relatedFile
+	relatedProcessId: relatedProcess
+}
 
 type relatedFile = {
-  id: number;
-  filePath: string;
-  fileName: string;
-  status: string;
-};
+	id: number
+	filePath: string
+	fileName: string
+	status: string
+	fileSystemId: string
+}
 
 type relatedProcess = {
-  id: number;
-  pid: number;
-};
+	id: number
+	pid: number
+}
