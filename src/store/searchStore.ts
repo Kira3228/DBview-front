@@ -18,7 +18,7 @@ export const useSearchStore = defineStore('search', () => {
 	const state = ref<SearchState>({
 		eventType: '',
 		startDate: null,
-		carrier: ``,
+		carrier: '',
 		endDate: null,
 		status: '',
 		filePath: '',
