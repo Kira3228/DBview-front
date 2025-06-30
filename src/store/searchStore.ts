@@ -32,7 +32,6 @@ export const useSearchStore = defineStore('search', () => {
 		value: SearchState[K]
 	) => {
 		state.value[field] = value
-		console.log(field, value)
 	}
 
 	// Сброс фильтров (кроме пагинации)

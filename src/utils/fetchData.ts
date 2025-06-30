@@ -10,19 +10,29 @@ export const fetchData = async (endPoint: string) => {
 };
 
 export const debouncedFetchEventLogData = async (
-  path: string = ``,
-  carrier: string = ``,
-  eventType: string = ``,
-  date: Date | string = ``,
-  status: string = ``,
-  page: 1
+  path: string = "",
+  carrier: string = "",
+  eventType: string = "",
+  startDate: Date | null = null,
+  endDate: Date | null = null,
+  status: string = "",
+  page: number = 1
 ) => {
-  const response = await fetch(
-    `http://localhost:3000/system-log/getFilteredSystemLog/?status=${status}&path=${path}&carrier=${carrier}&eventType=${eventType}&date=${date}&page=${page}`
-  );
+  const params = new URLSearchParams({
+    page: page.toString(),
+    status: encodeURIComponent(status),
+    path: encodeURIComponent(path),
+    carrier: encodeURIComponent(carrier),
+    eventType: encodeURIComponent(eventType),
+    startDate: startDate ? startDate.toISOString() : "",
+    endDate: endDate ? endDate.toISOString() : "",
+  });
+
+  const url = `http://localhost:3000/system-log/getFilteredSystemLog/?${params.toString()}`;
+
+  const response = await fetch(url);
   if (!response.ok) {
     throw new Error(`HTTP error! Status: ${response.status}`);
   }
-  const result = await response.json();
-  return result;
+  return response.json();
 };

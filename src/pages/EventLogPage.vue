@@ -15,24 +15,24 @@ const responseData = ref<EventLog>({
   totalCount: 0,
   totalPages: 0,
 });
-
+const eventLogTableStore = useEventLogTableStore()
 const currentPage = ref(1);
 const pageSize = ref(5);
 const error = ref(false);
 const isLoading = ref(false);
 const searchStore = useSearchStore();
-const eventLogTableStore = useEventLogTableStore();
+
 const fetchEvents = async () => {
   try {
     isLoading.value = true;
     const result: EventLog = await fetchData(
-      `http://localhost:3000/system-log/getFilteredSystemLog/?filePath=${searchStore.state.filePath}&`
+      `http://localhost:3000/system-log/getFilteredSystemLog/`
     );
-    eventLogTableStore.state.events = result.events || [];
-    eventLogTableStore.state.page = result.page || 1;
-    eventLogTableStore.state.totalPages = result.totalPages || 1;
-    eventLogTableStore.state.limit = result.limit || 30;
-    eventLogTableStore.state.totalCount = result.totalCount || 0;
+    eventLogTableStore.setEvents(result.events || []);
+    eventLogTableStore.setPagination({
+      page: eventLogTableStore.state.page,
+      limit: eventLogTableStore.state.limit
+    })
   } catch (err) {
     error.value = true;
     console.error("Fetch error:", err);
@@ -49,14 +49,9 @@ watch(currentPage, fetchEvents);
   <NConfigProvider>
     <div class="flex w-full flex-col p-4">
       <EventLogHeader />
-      <Table
-        :data="eventLogTableStore.state.events"
-        :current-page="currentPage"
-        :total="responseData.totalPages"
-        :page-size="pageSize"
-        :total-pages="responseData.totalPages"
-        @update:page="(newPage) => (currentPage = newPage)"
-      />
+      <Table :data="eventLogTableStore.state.events" :current-page="currentPage" :total="responseData.totalPages"
+        :page-size="pageSize" :total-pages="responseData.totalPages"
+        @update:page="(newPage) => (currentPage = newPage)" />
     </div>
   </NConfigProvider>
 </template>

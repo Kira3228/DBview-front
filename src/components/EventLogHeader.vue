@@ -9,87 +9,47 @@
       <div class="flex gap-3.5 items-center">
         <div>
           <label class="text-xs text-gray-400" for="file-name">Путь</label>
-          <SearchInput
-            :model-value="searchStore.state.filePath"
-            placeholder="Путь"
-            @update:modelValue="
-              (val) => {
-                searchStore.updateField('filePath', val);
-                setDebouncedValue(val);
-              }
-            "
-            id="filePath"
-          />
+          <SearchInput :model-value="searchStore.state.filePath" placeholder="Путь" @update:modelValue="(val) => {
+
+            updateFieldAndFetch('filePath', val)
+          }
+          " />
         </div>
         <div>
           <label class="text-xs text-gray-400" for="user">Носитель</label>
-          <SearchInput
-            placeholder="Носитель"
-            :model-value="searchStore.state.carrier"
-            @update:modelValue="
-              (val) => {
-                searchStore.updateField('carrier', val);
-                setDebouncedValue(val);
-              }
-            "
-            id="user"
-          />
+          <SearchInput placeholder="Носитель" :model-value="searchStore.state.carrier" @update:modelValue="
+            (val) => {
+              updateFieldAndFetch('carrier', val)
+
+            }
+          " id="user" />
         </div>
 
         <div>
-          <label class="text-xs text-gray-400" for="event-type"
-            >Тип события</label
-          >
-          <NSelect
-            id="event-type"
-            size="tiny"
-            style="max-width: 160px; min-width: 160px"
-            :value="searchStore.state.eventType"
-            @update:value="(val) => searchStore.updateField('eventType', val)"
-            :options="eventTypeOptions"
-          />
+          <label class="text-xs text-gray-400" for="event-type">Тип события</label>
+          <NSelect id="event-type" size="tiny" style="max-width: 160px; min-width: 160px"
+            :value="searchStore.state.eventType" @update:value="val => updateFieldAndFetch('eventType', val)"
+            :options="eventTypeOptions" />
         </div>
         <div>
           <label class="text-xs text-gray-400" for="status">Статус</label>
-          <NSelect
-            id="status"
-            placeholder="Статус"
-            size="tiny"
-            style="max-width: 160px; min-width: 160px"
-            :value="searchStore.state.status"
-            @update:value="(val) => searchStore.updateField('status', val)"
-            :options="statusOptions"
-          />
+          <NSelect id="status" placeholder="Статус" size="tiny" style="max-width: 160px; min-width: 160px"
+            :value="searchStore.state.status" @update:value="val => updateFieldAndFetch('status', val)"
+            :options="statusOptions" />
         </div>
       </div>
       <div class="flex">
         <div class="p-1.5 border-2">
           <div class="flex gap-2.5">
             <div>
-              <label class="text-xs text-gray-400" for="start-date"
-                >Начальная дата</label
-              >
-              <NDatePicker
-                id="start-date"
-                :value="searchStore.state.startDate"
-                @update:value="
-                  (val) => searchStore.updateField('startDate', val)
-                "
-              />
+              <label class="text-xs text-gray-400" for="start-date">Начальная дата</label>
+              <NDatePicker id="start-date" :value="searchStore.state.startDate"
+                @update:value="val => updateFieldAndFetch('startDate', val)" />
             </div>
             <div>
-              <label class="text-xs text-gray-400" for="end-date"
-                >Конечная дата</label
-              >
-              <NDatePicker
-                id="end-date"
-                :value="searchStore.state.endDate"
-                @update:value="
-                  (val) => {
-                    searchStore.updateField('endDate', val);
-                  }
-                "
-              />
+              <label class="text-xs text-gray-400" for="end-date">Конечная дата</label>
+              <NDatePicker id="end-date" :value="searchStore.state.endDate"
+                @update:value="val => updateFieldAndFetch('endDate', val)" />
             </div>
           </div>
         </div>
@@ -103,13 +63,48 @@ import { NButton, NButtonGroup, NDatePicker, NSelect } from "naive-ui";
 import SearchInput from "./UI/SearchInput.vue";
 import { useSearchStore } from "../store/searchStore";
 import { useDebounce } from "../Hooks/useDebounce";
-import { watch } from "vue";
-
-const { debouncedValue, setDebouncedValue } = useDebounce("", 1000);
+import { onBeforeMount, onMounted, onUnmounted, ref, watch } from "vue";
+import { debouncedFetchEventLogData } from "../utils/fetchData";
+import { cloneFnJSON } from "@vueuse/core";
 
 const searchStore = useSearchStore();
+const debounceTimer = ref(null);
 
-// Опции для селектов
+const updateFieldAndFetch = (field, value) => {
+  searchStore.updateField(field, value);
+  triggerDebouncedFetch();
+};
+
+const triggerDebouncedFetch = () => {
+  clearTimeout(debounceTimer.value);
+  debounceTimer.value = setTimeout(() => {
+    fetchData();
+  }, 500); // Задержка 500 мс
+};
+
+
+const fetchData = async () => {
+  console.log("Fetching data with params:", searchStore.state);
+  try {
+    const data = await debouncedFetchEventLogData(
+      searchStore.state.filePath,
+      searchStore.state.carrier,
+      searchStore.state.eventType,
+      searchStore.state.startDate,
+      searchStore.state.endDate,
+      searchStore.state.status,
+      searchStore.state.page
+    );
+    console.log(data)
+
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
+onUnmounted(() => {
+  clearTimeout(debounceTimer.value);
+});
+
 const eventTypeOptions = [
   { label: "Все", value: "" },
   { label: "Создание", value: "create" },

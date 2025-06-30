@@ -8,7 +8,6 @@ export const useDebounce = (initialValue: string = "", delay: number = 300) => {
     clearTimeout(timeoutId as number);
     timeoutId = setTimeout(() => {
       debouncedValue.value = newValue;
-      console.log(debouncedValue.value);
     }, delay);
   };
 
