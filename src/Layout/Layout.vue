@@ -42,9 +42,36 @@ const menuOptions = [
                 label: 'Архив',
                 key: 'archive',
                 route: { name: 'archive' }
+            },
+            {
+                label: 'Детали файла',
+                key: 'details',
+                route: { name: 'details' }
             }
         ]
-    }
+    },
+    {
+        label: 'Настройки',
+        key: 'settings',
+        route: { name: 'settings' }
+    },
+    {
+        label: 'Отчёты',
+        key: 'reports',
+        children: [
+            {
+                label: 'Список событий',
+                key: 'event-log',
+                route: { name: 'event-log' }
+            },
+            {
+                label: 'Цепочки распространения',
+                key: 'event-chains',
+                route: { name: 'event-chains' }
+            },
+        ]
+    },
+
 ];
 
 const handleMenuSelect = (key: string) => {

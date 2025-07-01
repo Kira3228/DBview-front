@@ -2,12 +2,12 @@
 import { onMounted, ref, watch } from "vue";
 import { fetchData } from "../utils/fetchData";
 import Table from "../components/Table.vue";
-import EventLogHeader from "../components/EventLogHeader.vue";
+
 import { NConfigProvider } from "naive-ui";
-import { useSearchStore } from "../store/searchStore";
 import type { EventLog } from "../utils/Types/EventLog.ts";
 import { useEventLogTableStore } from "../store/eventLogTableStore.ts";
-
+import { columns } from "../Helpers/EventLogTableColumns.ts";
+import EventLogHeader from "../components/EventLogHeader.vue";
 const responseData = ref<EventLog>({
   events: [],
   limit: 30,
@@ -20,7 +20,6 @@ const currentPage = ref(1);
 const pageSize = ref(5);
 const error = ref(false);
 const isLoading = ref(false);
-const searchStore = useSearchStore();
 
 const fetchEvents = async () => {
   try {
@@ -49,8 +48,8 @@ watch(currentPage, fetchEvents);
   <NConfigProvider>
     <div class="flex w-full flex-col p-4">
       <EventLogHeader />
-      <Table :data="eventLogTableStore.state.events" :current-page="currentPage" :total="responseData.totalPages"
-        :page-size="pageSize" :total-pages="responseData.totalPages"
+      <Table :data="eventLogTableStore.state.events" :current-page="currentPage" :columns="columns"
+        :total="responseData.totalPages" :page-size="pageSize" :total-pages="responseData.totalPages"
         @update:page="(newPage) => (currentPage = newPage)" />
     </div>
   </NConfigProvider>

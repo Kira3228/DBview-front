@@ -19,6 +19,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.3",
+    "@vue/runtime-core": "^3.5.17",
     "@vue/tsconfig": "^0.7.0",
     "naive-ui": "^2.42.0",
     "typescript": "~5.8.3",
