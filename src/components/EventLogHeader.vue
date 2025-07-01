@@ -66,8 +66,10 @@ import { useDebounce } from "../Hooks/useDebounce";
 import { onBeforeMount, onMounted, onUnmounted, ref, watch } from "vue";
 import { debouncedFetchEventLogData } from "../utils/fetchData";
 import { cloneFnJSON } from "@vueuse/core";
+import { useEventLogTableStore } from "../store/eventLogTableStore";
 
 const searchStore = useSearchStore();
+const eventLogTableStore = useEventLogTableStore()
 const debounceTimer = ref(null);
 
 const updateFieldAndFetch = (field, value) => {
@@ -95,7 +97,8 @@ const fetchData = async () => {
       searchStore.state.status,
       searchStore.state.page
     );
-    console.log(data)
+    console.log(`2312123`, data)
+	eventLogTableStore.updateStore(data)
 
   } catch (error) {
     console.error("Error fetching data:", error);

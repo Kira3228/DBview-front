@@ -18,17 +18,24 @@ export const debouncedFetchEventLogData = async (
   status: string = "",
   page: number = 1
 ) => {
-  const params = new URLSearchParams({
-    page: page.toString(),
-    status: encodeURIComponent(status),
-    path: encodeURIComponent(path),
-    carrier: encodeURIComponent(carrier),
-    eventType: encodeURIComponent(eventType),
-    startDate: startDate ? startDate.toISOString() : "",
-    endDate: endDate ? endDate.toISOString() : "",
-  });
+  const params = new URLSearchParams();
+
+  params.set("page", page.toString());
+  if (status) params.set("status", status);
+  console.log(status);
+  if (path) params.set("filePath", path);
+  console.log(path);
+  if (carrier) params.set("fileSystemId", carrier);
+  console.log(carrier);
+  if (eventType) params.set("eventType", eventType);
+  console.log(eventType);
+  if (startDate) params.set("startDate", startDate.toString());
+  console.log(startDate);
+  if (endDate) params.set("endDate", endDate.toString());
+  console.log(endDate);
 
   const url = `http://localhost:3000/system-log/getFilteredSystemLog/?${params.toString()}`;
+  console.log(url);
 
   const response = await fetch(url);
   if (!response.ok) {
