@@ -15,6 +15,10 @@ export const useEventLogTableStore = defineStore("eventLogTable", () => {
 
   // Полное обновление данных
   const updateStore = (newData: Partial<EventLog>) => {
+    // Явное преобразование page к числу, если он присутствует
+    if (newData.page !== undefined) {
+      newData.page = Number(newData.page);
+    }
     state.value = { ...state.value, ...newData };
   };
 
@@ -25,17 +29,23 @@ export const useEventLogTableStore = defineStore("eventLogTable", () => {
 
   // Обновление пагинации
   const setPagination = (config: {
-    page?: number;
+    page?: number | string; // Разрешаем и string на входе
     limit?: number;
     totalCount?: number;
     totalPages?: number;
   }) => {
-    if (config.page !== undefined) state.value.page = config.page;
-    if (config.limit !== undefined) state.value.limit = config.limit;
-    if (config.totalCount !== undefined)
-      state.value.totalCount = config.totalCount;
-    if (config.totalPages !== undefined)
-      state.value.totalPages = config.totalPages;
+    if (config.page !== undefined) {
+      state.value.page = Number(config.page); // Явное преобразование
+    }
+    if (config.limit !== undefined) {
+      state.value.limit = Number(config.limit);
+    }
+    if (config.totalCount !== undefined) {
+      state.value.totalCount = Number(config.totalCount);
+    }
+    if (config.totalPages !== undefined) {
+      state.value.totalPages = Number(config.totalPages);
+    }
   };
 
   // Сброс к начальному состоянию

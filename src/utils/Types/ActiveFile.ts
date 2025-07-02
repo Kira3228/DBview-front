@@ -12,6 +12,6 @@ export type ActiveFileRes = {
   files: ActiveFile[];
   totalCount: number;
   page: number;
-  totalPage: number;
+  totalPages: number;
   limit: number;
 };

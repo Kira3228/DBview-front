@@ -6,9 +6,9 @@
             <NButton size="small"> Архивировать </NButton>
         </NButtonGroup>
         <div class="flex gap-8">
-            <div class="flex gap-3.5 items-center">
+            <div class="flex gap-3.5 my-3.5 items-center">
                 <div>
-                    <label class="text-xs text-gray-400" for="file-name">Имя файла</label>
+                    <label class="text-xs text-gray-400" for="file-name">Путь</label>
                     <SearchInput v-model="searchFields.fileName"
                         @update:modelValue="(val) => handleSearchInput('fileName', val)" id='file-name' />
                 </div>
@@ -25,20 +25,6 @@
                 <div>
                     <label class="text-xs text-gray-400" for="event-type">Тип события</label>
                     <NSelect id="event-type" size="tiny" style="max-width: 160px; min-width: 160px;" />
-                </div>
-            </div>
-            <div class="flex">
-                <div class="p-1.5 border-2">
-                    <div class="flex gap-2.5">
-                        <div>
-                            <label class="text-xs text-gray-400" for="start-date">Начальная дата</label>
-                            <NDatePicker id="start-date" />
-                        </div>
-                        <div>
-                            <label class="text-xs text-gray-400" for="end-date">Конечная дата</label>
-                            <NDatePicker id="end-date" />
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

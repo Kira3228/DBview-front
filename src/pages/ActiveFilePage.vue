@@ -5,8 +5,9 @@ import Table from "../components/Table.vue";
 import { activeFileColumns } from "../Helpers/ActiveFilesTableColumns";
 import type { Event } from "../utils/Types/EventLog";
 import type { ActiveFile, ActiveFileRes } from "../utils/Types/ActiveFile";
+import { onMounted, ref } from "vue";
+import { useActiveFileStore } from "../store/activeFileStore";
 import { fetchData } from "../utils/fetchData";
-import { ref } from "vue";
 const testActiveFiles: ActiveFile[] = [
   {
     id: 1,
@@ -54,28 +55,37 @@ const testActiveFiles: ActiveFile[] = [
     status: "active",
   },
 ];
-
-const data = ref<ActiveFileRes>({
-  files: [],
-  limit: 30,
-  page: 1,
-  totalCount: 1,
-  totalPage: 1,
-});
+const activeFileTableStore = useActiveFileStore()
+const error = ref(false)
+const isLoading = ref(false)
 const testData = ref<ActiveFile[]>([]);
 
 testData.value = testActiveFiles;
 const fetchFiles = async () => {
-    try{
-
-    }
-    catch{
-
-    }
-    finally{
-        
-    }
+  try {
+    isLoading.value = true
+    const result: ActiveFileRes = await fetchData(`http://localhost:3000/active-files/`)
+    activeFileTableStore.setFiles(result.files)
+    console.log(result.files)
+    activeFileTableStore.setPagination({
+      page: result.page,
+      totalCount: result.limit,
+      totalPages: result.totalPages
+    })
+  }
+  catch {
+    error.value = true
+  }
+  finally {
+    isLoading.value = false
+  }
 };
+onMounted(fetchFiles);
+
+const handlePageChange = (newPage: number) => {
+  activeFileTableStore.setPagination({ page: newPage })
+  fetchFiles()
+}
 
 // data.value = fetchFiles
 </script>
@@ -83,9 +93,13 @@ const fetchFiles = async () => {
 <template>
   <div class="flex w-full flex-col p-4">
     <ActiveFileHeader />
-    <Table
-      :data="testData"
-      :columns="activeFileColumns as TableColumn<Event | ActiveFile >[]"
-    />
+    <Table :data="activeFileTableStore.state.files" :columns="activeFileColumns as TableColumn<Event | ActiveFile>[]"
+      :current-page="activeFileTableStore.state.page" :total="activeFileTableStore.state.totalCount"
+      :page-size="activeFileTableStore.state.limit" :total-pages="activeFileTableStore.state.totalPages"
+      @update:page="handlePageChange" />
+
+
+
+
   </div>
 </template>

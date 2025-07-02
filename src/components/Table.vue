@@ -1,22 +1,10 @@
 <template>
-  <div class="mt-4">
-    <NDataTable
-      ref="table"
-      :columns="columns"
-      :data="data"
-      :bordered="true"
-      :row-key="(row: TSystemEvent) => row.id"
-      class="shadow-sm"
-    />
+  <div class="mt-4 flex flex-col justify-between">
+    <NDataTable ref="table" :columns="columns" :data="data" :bordered="true" :row-key="(row: TSystemEvent) => row.id"
+      class="shadow-sm" />
     <div class="mt-6 flex justify-center">
-      <NPagination
-        :page="currentPage"
-        :item-count="props.total"
-        :page-size="pageSize"
-        :page-count="totalPages"
-        @update:page="handlePageChange"
-        show-quick-jumper
-      >
+      <NPagination :page="Number(currentPage)" :page-size="pageSize" :page-count="totalPages"
+        @update:page="handlePageChange" show-quick-jumper>
         <template #prev>
           <NButton>Previous</NButton>
         </template>
@@ -38,10 +26,10 @@ import type { TSystemEvent } from "../utils/Types/SystemEvent.types";
 import type { Event } from "../utils/Types/EventLog";
 import type { ActiveFile } from "../utils/Types/ActiveFile";
 
-const props = defineProps<{
+defineProps<{
   data?: Event[] | ActiveFile[];
   columns?: DataTableColumn<Event | ActiveFile>[];
-  currentPage?: number;
+  currentPage: number;
   total?: number;
   pageSize?: number;
   totalPages?: number;
@@ -51,6 +39,7 @@ const emit = defineEmits<{
 }>();
 
 const handlePageChange = (page: number) => {
+  console.log(`321123213`)
   emit("update:page", page);
 };
 </script>
