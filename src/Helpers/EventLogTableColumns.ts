@@ -1,7 +1,7 @@
 import type { DataTableColumn } from "naive-ui";
-import type { EventLog } from "../utils/Types/EventLog";
+import type { Event } from "../utils/Types/EventLog";
 
-export const columns: DataTableColumn<EventLog>[] = [
+export const columns: DataTableColumn<Event>[] = [
   { title: "ID", key: "id", width: 80 },
   {
     title: `relatedFileId`,

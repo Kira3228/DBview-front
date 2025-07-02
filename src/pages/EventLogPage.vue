@@ -2,12 +2,14 @@
 import { onMounted, ref, watch } from "vue";
 import { fetchData } from "../utils/fetchData";
 import Table from "../components/Table.vue";
-
 import { NConfigProvider } from "naive-ui";
-import type { EventLog } from "../utils/Types/EventLog.ts";
+import type { Event, EventLog } from "../utils/Types/EventLog.ts";
 import { useEventLogTableStore } from "../store/eventLogTableStore.ts";
 import { columns } from "../Helpers/EventLogTableColumns.ts";
 import EventLogHeader from "../components/EventLogHeader.vue";
+import type { ActiveFile } from "../utils/Types/ActiveFile.ts";
+import type { TableColumn } from "naive-ui/es/data-table/src/interface";
+
 const responseData = ref<EventLog>({
   events: [],
   limit: 30,
@@ -15,7 +17,7 @@ const responseData = ref<EventLog>({
   totalCount: 0,
   totalPages: 0,
 });
-const eventLogTableStore = useEventLogTableStore()
+const eventLogTableStore = useEventLogTableStore();
 const currentPage = ref(1);
 const pageSize = ref(5);
 const error = ref(false);
@@ -30,8 +32,8 @@ const fetchEvents = async () => {
     eventLogTableStore.setEvents(result.events || []);
     eventLogTableStore.setPagination({
       page: eventLogTableStore.state.page,
-      limit: eventLogTableStore.state.limit
-    })
+      limit: eventLogTableStore.state.limit,
+    });
   } catch (err) {
     error.value = true;
     console.error("Fetch error:", err);
@@ -48,9 +50,15 @@ watch(currentPage, fetchEvents);
   <NConfigProvider>
     <div class="flex w-full flex-col p-4">
       <EventLogHeader />
-      <Table :data="eventLogTableStore.state.events" :current-page="currentPage" :columns="columns"
-        :total="responseData.totalPages" :page-size="pageSize" :total-pages="responseData.totalPages"
-        @update:page="(newPage) => (currentPage = newPage)" />
+      <Table
+        :data="eventLogTableStore.state.events"
+        :current-page="currentPage"
+        :columns="columns as TableColumn<Event | ActiveFile >[]"
+        :total="responseData.totalPages"
+        :page-size="pageSize"
+        :total-pages="responseData.totalPages"
+        @update:page="(newPage) => (currentPage = newPage)"
+      />
     </div>
   </NConfigProvider>
 </template>

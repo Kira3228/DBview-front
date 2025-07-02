@@ -10,7 +10,6 @@
         <div>
           <label class="text-xs text-gray-400" for="file-name">Путь</label>
           <SearchInput :model-value="searchStore.state.filePath" placeholder="Путь" @update:modelValue="(val) => {
-
             updateFieldAndFetch('filePath', val)
           }
           " />
@@ -20,11 +19,9 @@
           <SearchInput placeholder="Носитель" :model-value="searchStore.state.carrier" @update:modelValue="
             (val) => {
               updateFieldAndFetch('carrier', val)
-
             }
           " id="user" />
         </div>
-
         <div>
           <label class="text-xs text-gray-400" for="event-type">Тип события</label>
           <NSelect id="event-type" size="tiny" style="max-width: 160px; min-width: 160px"
