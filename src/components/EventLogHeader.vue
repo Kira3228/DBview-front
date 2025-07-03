@@ -61,7 +61,7 @@ import SearchInput from "./UI/SearchInput.vue";
 import { useSearchStore } from "../store/searchStore";
 import { useDebounce } from "../Hooks/useDebounce";
 import { onBeforeMount, onMounted, onUnmounted, ref, watch } from "vue";
-import { debouncedFetchEventLogData } from "../utils/fetchData";
+import { fetchEventLogData } from "../utils/fetchData";
 import { cloneFnJSON } from "@vueuse/core";
 import { useEventLogTableStore } from "../store/eventLogTableStore";
 
@@ -78,14 +78,14 @@ const triggerDebouncedFetch = () => {
   clearTimeout(debounceTimer.value);
   debounceTimer.value = setTimeout(() => {
     fetchData();
-  }, 500); // Задержка 500 мс
+  }, 500); 
 };
 
 
 const fetchData = async () => {
   console.log("Fetching data with params:", searchStore.state);
   try {
-    const data = await debouncedFetchEventLogData(
+    const data = await fetchEventLogData(
       searchStore.state.filePath,
       searchStore.state.carrier,
       searchStore.state.eventType,

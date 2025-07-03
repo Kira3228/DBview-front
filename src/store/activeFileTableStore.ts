@@ -10,7 +10,7 @@ const initialState: ActiveFileRes = {
   totalPages: 0,
 };
 
-export const useActiveFileStore = defineStore(`active_file`, () => {
+export const useActiveFileTableStore = defineStore(`active_file`, () => {
   const state = ref<ActiveFileRes>({ ...initialState });
 
   const updateStore = (newData: Partial<ActiveFile>) => {

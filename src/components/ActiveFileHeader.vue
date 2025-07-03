@@ -8,23 +8,14 @@
         <div class="flex gap-8">
             <div class="flex gap-3.5 my-3.5 items-center">
                 <div>
-                    <label class="text-xs text-gray-400" for="file-name">Путь</label>
-                    <SearchInput v-model="searchFields.fileName"
-                        @update:modelValue="(val) => handleSearchInput('fileName', val)" id='file-name' />
+                    <label class="text-xs text-gray-400" for="filePath">Путь</label>
+                    <SearchInput placeholder="Путь" :model-value="activeFileSearchStore.state.filePath"
+                        @update:modelValue="(val) => updateFieldAndFetch('filePath', val)" id='filePath' />
                 </div>
                 <div>
-                    <label class="text-xs text-gray-400" for="user">Пользователь</label>
-                    <SearchInput v-model="searchFields.user"
-                        @update:modelValue="(val) => handleSearchInput('user', val)" id='user' />
-                </div>
-                <div>
-                    <label class="text-xs text-gray-400" for="mni">МНИ</label>
-                    <SearchInput v-model="searchFields.mni" @update:modelValue="(val) => handleSearchInput('mni', val)"
-                        id='mni' />
-                </div>
-                <div>
-                    <label class="text-xs text-gray-400" for="event-type">Тип события</label>
-                    <NSelect id="event-type" size="tiny" style="max-width: 160px; min-width: 160px;" />
+                    <label class="text-xs text-gray-400" for="inode">Inode</label>
+                    <SearchInput placeholder="Inode" :model-value="activeFileSearchStore.state.inode.toString()"
+                        @update:modelValue="(val) => updateFieldAndFetch('inode', val)" id='inode' />
                 </div>
             </div>
         </div>
@@ -32,25 +23,45 @@
 </template>
 
 <script setup lang="ts">
-import { NButton, NButtonGroup, NDatePicker, NSelect } from 'naive-ui';
+import { NButton, NButtonGroup } from 'naive-ui';
 import SearchInput from './UI/SearchInput.vue';
-import { reactive } from 'vue';
 
-const searchFields = reactive({
-    fileName: '',
-    user: '',
-    mni: '',
-});
-const searchParams = () => {
-    const params = Object.fromEntries(
-        Object.entries(searchFields).filter(([_, value]) => value !== `` && value !== null)
-    )
-    const queryString = new URLSearchParams(params).toString()
-    console.log(queryString)
+import { fetchActiveFile } from '../utils/fetchData';
+import { useActiveFileSearchStore } from '../store/activeFileSearchStore';
+import { useActiveFileTableStore } from '../store/activeFileTableStore';
+import { onUnmounted, ref } from 'vue';
+
+const debounceTimer = ref();
+const activeFileSearchStore = useActiveFileSearchStore()
+const activeFileTableStore = useActiveFileTableStore()
+const fetchData = async () => {
+
+    try {
+        const data = await fetchActiveFile(
+            activeFileSearchStore.state.filePath,
+            activeFileSearchStore.state.inode
+        )
+        activeFileTableStore.updateStore(data)
+        console.log(activeFileTableStore.state)
+    }
+    catch (error) {
+        console.error("Error fetching data:", error);
+    }
+
 }
-const handleSearchInput = (field: keyof typeof searchFields, value: string) => {
-    searchFields[field] = value;
-    console.log(`${field} changed:`, value);
-    searchParams();
+
+const updateFieldAndFetch = (field: 'filePath' | 'inode', value: string | number) => {
+    activeFileSearchStore.updateField(field, value)
+    triggerDebouncedFetch()
+}
+const triggerDebouncedFetch = () => {
+    clearTimeout(debounceTimer.value);
+    debounceTimer.value = setTimeout(() => {
+        fetchData();
+        console.log(`12321313131313131313`)
+    }, 750);
 };
+onUnmounted(() => {
+    clearTimeout(debounceTimer.value);
+});
 </script>

@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import Layout from "../Layout/Layout.vue";
 import EventLogPage from "../pages/EventLogPage.vue";
 import ActiveFilePage from "../pages/ActiveFilePage.vue";
+import ArchiveFilePage from "../pages/ArchiveFilePage.vue";
 
 const routes = [
   {
@@ -29,7 +30,7 @@ const routes = [
       {
         path: "/archive",
         name: "archive",
-        component: EventLogPage,
+        component: ArchiveFilePage,
         meta: {
           menuKey: "archive",
         },
