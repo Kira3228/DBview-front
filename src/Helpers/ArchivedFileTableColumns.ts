@@ -3,7 +3,7 @@ import type { ActiveFile } from "../utils/Types/ActiveFile";
 import { h } from "vue";
 import { updateStatus } from "../utils/fetchData";
 
-export const activeFileColumns: DataTableColumn<ActiveFile>[] = [
+export const archiveFileColumns: DataTableColumn<ActiveFile>[] = [
   { title: "ID", key: "id", width: 80 },
   {
     title: `Путь`,
@@ -36,28 +36,7 @@ export const activeFileColumns: DataTableColumn<ActiveFile>[] = [
       );
     },
   },
-  {
-    title: "Изменить статус",
-    key: "action",
-    render(row) {
-      return h(NSelect, {
-        size: "tiny",
-        value: row.status,
-        options: statusOptions,
-        onUpdateValue: (newStatus: string) => {
-          console.log(newStatus);
-          row.status = newStatus;
-          updateStatus(row.id, row.status);
-          // Тут можно отправить обновление на сервер, если нужно
-          // например: updateStatus(row.id, newStatus)
-        },
-      });
-    },
-  },
+  
 ];
 
-const statusOptions = [
-  { label: "active", value: "active" },
-  { label: "archived", value: "archived" },
-  { label: "deleted", value: "deleted" },
-];
+

@@ -25,7 +25,6 @@
 <script setup lang="ts">
 import { NButton, NButtonGroup } from 'naive-ui';
 import SearchInput from './UI/SearchInput.vue';
-
 import { fetchActiveFile } from '../utils/fetchData';
 import { useActiveFileSearchStore } from '../store/activeFileSearchStore';
 import { useActiveFileTableStore } from '../store/activeFileTableStore';
