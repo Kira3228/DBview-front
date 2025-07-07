@@ -1,20 +1,17 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue';
-import ActiveFileHeader from '../components/ActiveFileHeader.vue';
 import Table from '../components/Table.vue';
 import { useArchivedFileTableStore } from '../store/achivedFileTableStore';
-import type { ActiveFile, ActiveFileRes } from '../utils/Types/ActiveFile';
+import type { ActiveFileRes } from '../utils/Types/ActiveFile';
 import { fetchData } from '../utils/fetchData';
 import { archiveFileColumns } from '../Helpers/ArchivedFileTableColumns';
 import type { TableColumn } from 'naive-ui/es/data-table/src/interface';
-import { activeFileColumns } from '../Helpers/ActiveFilesTableColumns';
-import { useArchivedFileSearchStore } from '../store/archivedFileSearchStore';
 import ArchivedFileHeader from '../components/ArchivedFileHeader.vue';
 
 const error = ref(false)
 const isLoading = ref(false)
 const archivedFileTableStore = useArchivedFileTableStore()
-const archivedFileSearchStore = useArchivedFileSearchStore()
+
 const fetchFiles = async () => {
     try {
         isLoading.value = true

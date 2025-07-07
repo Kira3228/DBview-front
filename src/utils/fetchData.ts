@@ -1,3 +1,5 @@
+import { couldStartTrivia } from "typescript";
+
 export const fetchData = async (endPoint: string) => {
   const response = await fetch(endPoint);
 
@@ -58,7 +60,10 @@ export const fetchActiveFile = async (path: string = "", inode: number = 0) => {
 
   return response.json();
 };
-export const fetchArchiveFile = async (path: string = "", inode: number = 0) => {
+export const fetchArchiveFile = async (
+  path: string = "",
+  inode: number = 0
+) => {
   const params = new URLSearchParams();
   if (path) params.set(`filePath`, path);
   if (inode > 0) params.set(`inode`, inode.toString());
@@ -92,5 +97,30 @@ export const updateStatus = async (id: number, status: string) => {
     return data;
   } catch (error) {
     console.error("Error updating status:", error);
+  }
+};
+
+export const downloadFile = async (url: string, filename: string) => {
+  try {
+    const res = await fetch(url);
+    if (!res.ok) {
+      throw new Error();
+    }
+    const blob = await res.blob();
+    console.log(blob);
+
+    const downloadUrl = window.URL.createObjectURL(blob);
+    console.log(downloadUrl);
+    const a = document.createElement(`a`);
+    a.href = downloadUrl;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+
+    window.URL.revokeObjectURL(downloadUrl);
+    a.remove();
+  } catch (error) {
+    console.error("Download failed:", error);
+    throw error;
   }
 };

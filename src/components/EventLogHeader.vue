@@ -1,9 +1,8 @@
 <template>
   <div class="w-full">
     <NButtonGroup class="">
-      <NButton size="small"> Детали </NButton>
-      <NButton size="small"> Экспортировать </NButton>
-      <NButton size="small"> Архивировать </NButton>
+      <NButton size="small" @click="downloadFile"> Экспортировать всё </NButton>
+      <NButton size="small"> Экспортировать выделенное </NButton>
     </NButtonGroup>
     <div class="flex gap-8">
       <div class="flex gap-3.5 items-center">
@@ -61,7 +60,7 @@ import SearchInput from "./UI/SearchInput.vue";
 import { useSearchStore } from "../store/searchStore";
 import { useDebounce } from "../Hooks/useDebounce";
 import { onBeforeMount, onMounted, onUnmounted, ref, watch } from "vue";
-import { fetchEventLogData } from "../utils/fetchData";
+import { downloadFile, fetchData, fetchEventLogData } from "../utils/fetchData";
 import { cloneFnJSON } from "@vueuse/core";
 import { useEventLogTableStore } from "../store/eventLogTableStore";
 
@@ -77,12 +76,16 @@ const updateFieldAndFetch = (field, value) => {
 const triggerDebouncedFetch = () => {
   clearTimeout(debounceTimer.value);
   debounceTimer.value = setTimeout(() => {
-    fetchData();
-  }, 500); 
+    fetchEventData();
+  }, 500);
 };
 
+const downloadCSV = async () => {
+  const res = await downloadFile(`http://localhost:3000/system-log/export-csv`)
 
-const fetchData = async () => {
+}
+
+const fetchEventData = async () => {
   console.log("Fetching data with params:", searchStore.state);
   try {
     const data = await fetchEventLogData(
@@ -95,7 +98,7 @@ const fetchData = async () => {
       searchStore.state.page
     );
     console.log(`2312123`, data)
-	eventLogTableStore.updateStore(data)
+    eventLogTableStore.updateStore(data)
 
   } catch (error) {
     console.error("Error fetching data:", error);

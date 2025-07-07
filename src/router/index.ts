@@ -3,6 +3,7 @@ import Layout from "../Layout/Layout.vue";
 import EventLogPage from "../pages/EventLogPage.vue";
 import ActiveFilePage from "../pages/ActiveFilePage.vue";
 import ArchiveFilePage from "../pages/ArchiveFilePage.vue";
+import FileDetails from "../pages/Graph/FileDetails.vue";
 
 const routes = [
   {
@@ -33,6 +34,14 @@ const routes = [
         component: ArchiveFilePage,
         meta: {
           menuKey: "archive",
+        },
+      },
+      {
+        path: "/details",
+        name: "details",
+        component: FileDetails,
+        meta: {
+          menuKey: "details",
         },
       },
     ],

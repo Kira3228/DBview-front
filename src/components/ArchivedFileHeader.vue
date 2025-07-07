@@ -4,7 +4,7 @@ import SearchInput from './UI/SearchInput.vue';
 import { useArchivedFileSearchStore } from '../store/archivedFileSearchStore';
 import { onUnmounted, ref } from 'vue';
 import { useArchivedFileTableStore } from '../store/achivedFileTableStore';
-import { fetchActiveFile, fetchArchiveFile } from '../utils/fetchData';
+import { fetchArchiveFile } from '../utils/fetchData';
 const archivedFileSearchStore = useArchivedFileSearchStore()
 const archivedFileTableStore = useArchivedFileTableStore()
 const debounceTimer = ref();
