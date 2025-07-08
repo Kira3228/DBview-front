@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { NButton, NInput, NInputGroup } from "naive-ui";
-import SearchIcon from "../Icons/SearchIcon.vue";
+import {  NInput, NInputGroup } from "naive-ui";
+
 
 const props = defineProps<{
   modelValue: string;
   placeholder?: string;
+  label?: string
 }>();
 
 const emits = defineEmits<{
@@ -14,16 +15,13 @@ const emits = defineEmits<{
 
 </script>
 <template>
+  <label class="text-xs text-gray-400" for="search">{{ label }}</label>
   <NInputGroup>
-    <NInput :value="modelValue" @update:value="
+    <NInput id="search" :value="modelValue" @update:value="
       (value) => {
         emits('update:modelValue', value);
         ;
       }" :placeholder="props.placeholder" size="tiny" autosize class="w-36" />
-    <NButton size="tiny">
-      <template #icon>
-        <SearchIcon />
-      </template>
-    </NButton>
+
   </NInputGroup>
 </template>

@@ -1,7 +1,7 @@
 <template>
   <div class="mt-4 flex flex-col justify-between">
-    <NDataTable @update:checked-row-keys="handleTest" ref="table" :columns="columns" :data="data" :bordered="true"
-      :row-key="(row: TableItem) => row.id"  class="shadow-sm" @test="handleTest" />
+    <NDataTable @update:checked-row-keys="handleSelectRows" ref="table" :columns="columns" :data="data" :bordered="true"
+      :row-key="(row: TableItem) => row.id" class="shadow-sm" @select:rows="handleSelectRows" />
     <div class=" mt-6 flex justify-center">
       <NPagination :page="Number(currentPage)" :page-size="pageSize" :page-count="totalPages"
         @update:page="handlePageChange" show-quick-jumper>
@@ -38,29 +38,17 @@ defineProps<{
   onRowClick?: (row: TableItem) => void
 }>();
 
-const handleTest = (rowKeys: DataTableRowKey[]) => {
-  emit(`test`, rowKeys)
+const handleSelectRows = (rowKeys: DataTableRowKey[]) => {
+  emit(`select:rows`, rowKeys)
 
 }
 const emit = defineEmits<{
   (e: `update:page`, page: number): void;
-  (e: `test`, rowKeys: DataTableRowKey[]): void
+  (e: `select:rows`, rowKeys: DataTableRowKey[]): void
 }>();
 
 const handlePageChange = (page: number) => {
   emit("update:page", page);
 };
 
-
-  // const rowProps: DataTableCreateRowProps<TableItem> = (row) => {
-  //   return {
-  //     style: { cursor: props.onRowClick ? 'pointer' : 'default' },
-  //     onClick: (e: MouseEvent) => {
-  //       if ((e.target as HTMLElement).closest('.n-checkbox') || !props.onRowClick) {
-  //         return;
-  //       }
-  //       props.onRowClick(row);
-  //     }
-  //   };
-  // };
 </script>

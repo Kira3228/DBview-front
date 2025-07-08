@@ -1,25 +1,24 @@
 <template>
   <div class="w-full">
     <NButtonGroup class="">
-      <NButton size="small" @click="downloadFile"> Экспортировать всё </NButton>
-      <NButton size="small"> Экспортировать выделенное </NButton>
+      <NButton size="small" @click="downloadCSV"> Экспортировать всё </NButton>
+      <NButton :disabled="!selectedEventLogRowsStore.state.selectedIds.length > 0 ? true : false" size="small"
+        @click="downloadSelectedCSV"> Экспортировать выделенное </NButton>
     </NButtonGroup>
     <div class="flex gap-8">
       <div class="flex gap-3.5 items-center">
         <div>
-          <label class="text-xs text-gray-400" for="file-name">Путь</label>
-          <SearchInput :model-value="searchStore.state.filePath" placeholder="Путь" @update:modelValue="(val) => {
+          <SearchInput label="Путь" :model-value="searchStore.state.filePath" placeholder="Путь" @update:modelValue="(val) => {
             updateFieldAndFetch('filePath', val)
           }
           " />
         </div>
         <div>
-          <label class="text-xs text-gray-400" for="user">Носитель</label>
-          <SearchInput placeholder="Носитель" :model-value="searchStore.state.carrier" @update:modelValue="
-            (val) => {
+          <SearchInput label="Носитель" :model-value="searchStore.state.carrier" placeholder="Носитель"
+            @update:modelValue="(val) => {
               updateFieldAndFetch('carrier', val)
             }
-          " id="user" />
+            " />
         </div>
         <div>
           <label class="text-xs text-gray-400" for="event-type">Тип события</label>
@@ -56,16 +55,17 @@
 
 <script setup>
 import { NButton, NButtonGroup, NDatePicker, NSelect } from "naive-ui";
-import SearchInput from "./UI/SearchInput.vue";
-import { useSearchStore } from "../store/searchStore";
-import { useDebounce } from "../Hooks/useDebounce";
-import { onBeforeMount, onMounted, onUnmounted, ref, watch } from "vue";
-import { downloadFile, fetchData, fetchEventLogData } from "../utils/fetchData";
-import { cloneFnJSON } from "@vueuse/core";
-import { useEventLogTableStore } from "../store/eventLogTableStore";
+
+import { useSearchStore } from "../../../store/searchStore";
+import { onUnmounted, ref } from "vue";
+import { downloadFile, fetchEventLogData } from "../../../utils/fetchData";
+import { useEventLogTableStore } from "../../../store/eventLogTableStore";
+import { useSelectEventLogStore } from "../../../store/selectedEventLogRowsStore";
+import SearchInput from "../../../components/UI/SearchInput.vue";
 
 const searchStore = useSearchStore();
 const eventLogTableStore = useEventLogTableStore()
+const selectedEventLogRowsStore = useSelectEventLogStore()
 const debounceTimer = ref(null);
 
 const updateFieldAndFetch = (field, value) => {
@@ -81,8 +81,12 @@ const triggerDebouncedFetch = () => {
 };
 
 const downloadCSV = async () => {
-  const res = await downloadFile(`http://localhost:3000/system-log/export-csv`)
+  await downloadFile(`http://localhost:3000/system-log/exportCsv`)
+}
 
+const downloadSelectedCSV = async () => {
+  console.log()
+  await downloadFile(`http://localhost:3000/system-log/exportSelectedCsv/?ids=${selectedEventLogRowsStore.state.selectedIds}`)
 }
 
 const fetchEventData = async () => {
@@ -97,7 +101,6 @@ const fetchEventData = async () => {
       searchStore.state.status,
       searchStore.state.page
     );
-    console.log(`2312123`, data)
     eventLogTableStore.updateStore(data)
 
   } catch (error) {

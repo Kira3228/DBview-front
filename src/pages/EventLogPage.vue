@@ -6,7 +6,7 @@ import { NConfigProvider, type DataTableRowKey } from "naive-ui";
 import type { Event, EventLog } from "../utils/Types/EventLog.ts";
 import { useEventLogTableStore } from "../store/eventLogTableStore.ts";
 import { columns } from "../Helpers/EventLogTableColumns.ts";
-import EventLogHeader from "../components/EventLogHeader.vue";
+import EventLogHeader from "../features/event-log/UI/EventLogHeader.vue";
 import type { ActiveFile } from "../utils/Types/ActiveFile.ts";
 import type { TableColumn } from "naive-ui/es/data-table/src/interface";
 import { useSearchStore } from "../store/searchStore.ts";
@@ -46,7 +46,7 @@ const handlePageChange = (newPage: number) => {
 }
 
 const rows = ref<DataTableRowKey[]>([])
-const handleTest = (rowKeys: DataTableRowKey[]) => {
+const handleSelectRows = (rowKeys: DataTableRowKey[]) => {
   rows.value = rowKeys
   selectEventRows.setSelectedIds(rowKeys)
   console.log(...selectEventRows.state.selectedIds);
@@ -63,7 +63,7 @@ onMounted(fetchEvents);
       <Table :data="eventLogTableStore.state.events" :current-page="eventLogTableStore.state.page"
         :columns="columns as TableColumn<Event | ActiveFile>[]" :total="eventLogTableStore.state.totalCount"
         :page-size="eventLogTableStore.state.limit" :total-pages="eventLogTableStore.state.totalPages"
-        @update:page="handlePageChange" @test="handleTest" />
+        @update:page="handlePageChange" @select:rows="handleSelectRows" />
     </div>
   </NConfigProvider>
 </template>
