@@ -11,40 +11,7 @@ export const fetchData = async (endPoint: string) => {
   return result;
 };
 
-export const fetchEventLogData = async (
-  path: string = "",
-  carrier: string = "",
-  eventType: string = "",
-  startDate: Date | null = null,
-  endDate: Date | null = null,
-  status: string = "",
-  page: number = 1
-) => {
-  const params = new URLSearchParams();
 
-  params.set("page", page.toString());
-  if (status) params.set("status", status);
-  console.log(status);
-  if (path) params.set("filePath", path);
-  console.log(path);
-  if (carrier) params.set("fileSystemId", carrier);
-  console.log(carrier);
-  if (eventType) params.set("eventType", eventType);
-  console.log(eventType);
-  if (startDate) params.set("startDate", startDate.toString());
-  console.log(startDate);
-  if (endDate) params.set("endDate", endDate.toString());
-  console.log(endDate);
-
-  const url = `http://localhost:3000/system-log/getFilteredSystemLog/?${params.toString()}`;
-  console.log(url);
-
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error(`HTTP error! Status: ${response.status}`);
-  }
-  return response.json();
-};
 
 export const fetchActiveFile = async (path: string = "", inode: number = 0) => {
   const params = new URLSearchParams();
@@ -100,33 +67,4 @@ export const updateStatus = async (id: number, status: string) => {
   }
 };
 
-export const downloadFile = async (url: string) => {
-  try {
-    const res = await fetch(url);
 
-    if (!res.ok) {
-      throw new Error();
-    }
-
-    const blob = await res.blob();
-    console.log(blob);
-    const downloadUrl = window.URL.createObjectURL(blob);
-
-    console.log(downloadUrl);
-
-    const a = document.createElement(`a`);
-    a.href = downloadUrl;
-    a.download = `system-logs.csv`;
-    document.body.appendChild(a);
-    a.click();
-
-    setTimeout(() => {
-      document.body.removeChild(a);
-      URL.revokeObjectURL(downloadUrl);
-    }, 100);
-    
-  } catch (error) {
-    console.error("Download failed:", error);
-    throw error;
-  }
-};

@@ -1,16 +1,18 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import { fetchData } from "../utils/fetchData";
-import Table from "../components/Table.vue";
+import { fetchData } from "../shared/api/fetchData.ts";
 import { NConfigProvider, type DataTableRowKey } from "naive-ui";
-import type { Event, EventLog } from "../utils/Types/EventLog.ts";
-import { useEventLogTableStore } from "../store/eventLogTableStore.ts";
+import type { Event, EventLog } from "../shared/lib/types/EventLog.ts";
 import { columns } from "../Helpers/EventLogTableColumns.ts";
-import EventLogHeader from "../features/event-log/UI/EventLogHeader.vue";
-import type { ActiveFile } from "../utils/Types/ActiveFile.ts";
+import type { ActiveFile } from "../shared/lib/types/ActiveFile.ts";
 import type { TableColumn } from "naive-ui/es/data-table/src/interface";
-import { useSearchStore } from "../store/searchStore.ts";
-import { useSelectEventLogStore } from "../store/selectedEventLogRowsStore.ts";
+import useEventLogTableStore from "../store/eventLogTableStore.ts";
+import useSearchStore from "../store/searchStore.ts";
+import useSelectEventLogStore from "../store/selectedEventLogRowsStore.ts";
+import Table from "../shared/ui/Table/Table.vue";
+import EventLogHeader from "../features/event-log/UI/EventLogHeader.vue";
+
+
 
 const eventLogTableStore = useEventLogTableStore();
 const searchStore = useSearchStore()

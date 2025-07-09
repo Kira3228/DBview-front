@@ -5,8 +5,7 @@ import { ref } from "vue";
 type initialState = {
   selectedIds: DataTableRowKey[];
 };
-
-export const useSelectEventLogStore = defineStore(`select_events`, () => {
+const useSelectEventLogStore = defineStore(`select_events`, () => {
   const state = ref<initialState>({
     selectedIds: [],
   });
@@ -37,3 +36,5 @@ export const useSelectEventLogStore = defineStore(`select_events`, () => {
     reset,
   };
 });
+
+export default useSelectEventLogStore;

@@ -1,7 +1,7 @@
 import { NSelect, NTag, type DataTableColumn } from "naive-ui";
-import type { ActiveFile } from "../utils/Types/ActiveFile";
+import type { ActiveFile } from "../shared/lib/types/ActiveFile";
 import { h } from "vue";
-import { updateStatus } from "../utils/fetchData";
+import { updateStatus } from "../shared/api/fetchData";
 
 export const activeFileColumns: DataTableColumn<ActiveFile>[] = [
   { title: "ID", key: "id", width: 80 },

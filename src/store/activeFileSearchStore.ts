@@ -5,7 +5,7 @@ export interface InitialState {
   filePath: string;
   inode: number;
 }
-export const useActiveFileSearchStore = defineStore(`active-search`, () => {
+const useActiveFileSearchStore = defineStore(`active-search`, () => {
   const state = ref<InitialState>({
     filePath: "",
     inode: 0,
@@ -29,3 +29,4 @@ export const useActiveFileSearchStore = defineStore(`active-search`, () => {
     resetFilters,
   };
 });
+export default useActiveFileSearchStore;

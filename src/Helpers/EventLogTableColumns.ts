@@ -1,5 +1,5 @@
 import type { DataTableColumn } from "naive-ui";
-import type { Event } from "../utils/Types/EventLog";
+import type { Event } from "../shared/lib/types/EventLog";
 import { h } from "vue";
 import { NCode } from "naive-ui";
 

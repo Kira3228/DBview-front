@@ -20,35 +20,24 @@ import {
   NButton,
   NDataTable,
   NPagination,
-  type DataTableColumn,
   type DataTableRowKey,
 } from "naive-ui";
-import type { Event } from "../utils/Types/EventLog";
-import type { ActiveFile } from "../utils/Types/ActiveFile";
+import type { TableItem, TableProps } from "./Table.type";
 
-type TableItem = Event | ActiveFile;
-
-defineProps<{
-  data?: Event[] | ActiveFile[];
-  columns?: DataTableColumn<Event | ActiveFile>[];
-  currentPage: number;
-  total?: number;
-  pageSize?: number;
-  totalPages?: number;
-  onRowClick?: (row: TableItem) => void
-}>();
+defineProps<
+  TableProps
+>();
 
 const handleSelectRows = (rowKeys: DataTableRowKey[]) => {
   emit(`select:rows`, rowKeys)
-
 }
-const emit = defineEmits<{
-  (e: `update:page`, page: number): void;
-  (e: `select:rows`, rowKeys: DataTableRowKey[]): void
-}>();
 
 const handlePageChange = (page: number) => {
   emit("update:page", page);
 };
 
+const emit = defineEmits<{
+  (e: `update:page`, page: number): void;
+  (e: `select:rows`, rowKeys: DataTableRowKey[]): void
+}>();
 </script>

@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import type { EventLog } from "../utils/Types/EventLog";
+import type { EventLog } from "../shared/lib/types/EventLog";
 
 const initialState: EventLog = {
   events: [],
@@ -10,7 +10,7 @@ const initialState: EventLog = {
   totalPages: 0,
 };
 
-export const useEventLogTableStore = defineStore("eventLogTable", () => {
+const useEventLogTableStore = defineStore("eventLogTable", () => {
   const state = ref<EventLog>({ ...initialState });
 
   // Полное обновление данных
@@ -61,3 +61,4 @@ export const useEventLogTableStore = defineStore("eventLogTable", () => {
     reset,
   };
 });
+export default useEventLogTableStore;

@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import type { ActiveFile, ActiveFileRes } from "../utils/Types/ActiveFile";
+import type { ActiveFile, ActiveFileRes } from "../shared/lib/types/ActiveFile";
 import { ref } from "vue";
 
 const initialState: ActiveFileRes = {
@@ -10,7 +10,7 @@ const initialState: ActiveFileRes = {
   totalPages: 0,
 };
 
-export const useActiveFileTableStore = defineStore(`active_file`, () => {
+const useActiveFileTableStore = defineStore(`active_file`, () => {
   const state = ref<ActiveFileRes>({ ...initialState });
 
   const updateStore = (newData: Partial<ActiveFile>) => {
@@ -46,3 +46,4 @@ export const useActiveFileTableStore = defineStore(`active_file`, () => {
     reset,
   };
 });
+export default useActiveFileTableStore;

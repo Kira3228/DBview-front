@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import type { TableColumn } from 'naive-ui/es/data-table/src/interface'
-import ActiveFileHeader from '../components/ActiveFileHeader.vue'
-import Table from '../components/Table.vue'
+
 import { activeFileColumns } from '../Helpers/ActiveFilesTableColumns'
-import type { Event } from '../utils/Types/EventLog'
-import type { ActiveFile, ActiveFileRes } from '../utils/Types/ActiveFile'
+import type { Event } from '../shared/lib/types/EventLog'
+import type { ActiveFile, ActiveFileRes } from '../shared/lib/types/ActiveFile'
 import { onMounted, ref } from 'vue'
-import { useActiveFileTableStore } from '../store/activeFileTableStore'
-import { fetchData } from '../utils/fetchData'
-import { useActiveFileSearchStore } from '../store/activeFileSearchStore'
+
+import { fetchData } from '../shared/api/fetchData'
+import { useActiveFileSearchStore, useActiveFileTableStore } from '../store'
+import Table from '../shared/ui/Table/Table.vue'
+import ActiveFileHeader from '../features/event-log/UI/ActiveFileHeader.vue'
+
 
 const activeFileTableStore = useActiveFileTableStore()
 const activeFileSearchStore = useActiveFileSearchStore()
