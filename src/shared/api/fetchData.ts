@@ -1,4 +1,4 @@
-import { couldStartTrivia } from "typescript";
+
 
 export const fetchData = async (endPoint: string) => {
   const response = await fetch(endPoint);
