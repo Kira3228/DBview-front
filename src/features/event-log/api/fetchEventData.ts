@@ -1,3 +1,4 @@
+import { endpoints } from "./endpoints";
 export const fetchEventLogData = async (
   path: string = "",
   carrier: string = "",
@@ -23,8 +24,8 @@ export const fetchEventLogData = async (
   if (endDate) params.set("endDate", endDate.toString());
   console.log(endDate);
 
-  const url = `http://localhost:3000/system-log/getFilteredSystemLog/?${params.toString()}`;
-  console.log(url);
+  const url = `${endpoints.getFiltered}${params.toString()}`;
+  console.log(123123123123123123132,url);
 
   const response = await fetch(url);
   if (!response.ok) {

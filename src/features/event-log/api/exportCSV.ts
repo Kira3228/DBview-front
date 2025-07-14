@@ -1,12 +1,13 @@
 import type { DataTableRowKey } from "naive-ui";
 import { downloadFile } from "../../../shared/lib/downloadFile";
+import { endpoints } from "./endpoints";
 
 export const downloadCSV = async () => {
   console.log(`качаю всё`);
-  await downloadFile(`http://localhost:3000/system-log/exportCsv`);
+  await downloadFile(`${endpoints.exportAllCsv}`);
 };
 export const downloadSelectedCSV = async (ids: DataTableRowKey[]) => {
   await downloadFile(
-    `http://localhost:3000/system-log/exportSelectedCsv/?ids=${ids}`
+    `${endpoints.exportSelectedCsv}${ids}`
   );
 };

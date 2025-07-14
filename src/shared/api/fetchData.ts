@@ -1,7 +1,8 @@
-
+import { endpoints } from "../../features/event-log/api/endpoints";
 
 export const fetchData = async (endPoint: string) => {
   const response = await fetch(endPoint);
+  console.log(endPoint);
 
   if (!response.ok) {
     throw new Error(`HTTP error! Status: ${response.status}`);
@@ -35,7 +36,7 @@ export const fetchArchiveFile = async (
   if (path) params.set(`filePath`, path);
   if (inode > 0) params.set(`inode`, inode.toString());
 
-  const url = `http://localhost:3000/active-files/archive/?${params.toString()}`;
+  const url = `${endpoints.getArchive}/?${params.toString()}`;
   console.log(url);
   const response = await fetch(url);
   if (!response.ok) {

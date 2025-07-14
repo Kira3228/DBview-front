@@ -9,7 +9,7 @@ import Table from '../shared/ui/Table/Table.vue';
 
 
 
-
+import { endpoints } from '../features/event-log/api/endpoints'
 import ArchivedFileHeader from '../features/event-log/UI/ArchivedFileHeader.vue';
 
 const error = ref(false)
@@ -20,7 +20,7 @@ const fetchFiles = async () => {
     try {
         isLoading.value = true
         const result: ActiveFileRes = await fetchData(
-            `http://localhost:3000/active-files/archive`
+            `${endpoints.getArchive}`
         )
         archivedFileTableStore.setFiles(result.files)
         console.log(`архивированные файлы`, result.files)

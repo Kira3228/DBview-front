@@ -3,7 +3,8 @@ import Layout from "../Layout/Layout.vue";
 import EventLogPage from "../pages/EventLogPage.vue";
 import ActiveFilePage from "../pages/ActiveFilePage.vue";
 import ArchiveFilePage from "../pages/ArchiveFilePage.vue";
-import FileDetails from "../pages/Graph/FileDetails.vue";
+import FileDetails from "../pages/FileDetails.vue";
+
 
 const routes = [
   {
