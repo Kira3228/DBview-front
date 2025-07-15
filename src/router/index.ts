@@ -3,7 +3,8 @@ import Layout from "../Layout/Layout.vue";
 import EventLogPage from "../pages/EventLogPage.vue";
 import ActiveFilePage from "../pages/ActiveFilePage.vue";
 import ArchiveFilePage from "../pages/ArchiveFilePage.vue";
-import FileDetails from "../pages/FileDetails.vue";
+
+import FileDetailsPage from "../pages/FileDetailsPage.vue";
 
 
 const routes = [
@@ -40,7 +41,7 @@ const routes = [
       {
         path: "/details",
         name: "details",
-        component: FileDetails,
+        component: FileDetailsPage,
         meta: {
           menuKey: "details",
         },

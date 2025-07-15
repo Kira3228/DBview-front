@@ -24,7 +24,7 @@ const fetchEvents = async () => {
     isLoading.value = true;
 
     const result: EventLog = await fetchData(
-      `http://localhost:3000/system-log/getFilteredSystemLog/?page=${eventLogTableStore.state.page}&status=${searchStore.state.status}`
+      `http://localhost:3000/api/logs/filtered/?page=${eventLogTableStore.state.page}&status=${searchStore.state.status}`
     );
 
     eventLogTableStore.setEvents(result.events || []);
@@ -60,12 +60,10 @@ onMounted(fetchEvents);
 
 <template>
   <NConfigProvider>
-    <div class="flex w-full flex-col p-4">
       <EventLogHeader />
       <Table :data="eventLogTableStore.state.events" :current-page="eventLogTableStore.state.page"
         :columns="columns as TableColumn<Event | ActiveFile>[]" :total="eventLogTableStore.state.totalCount"
         :page-size="eventLogTableStore.state.limit" :total-pages="eventLogTableStore.state.totalPages"
         @update:page="handlePageChange" @select:rows="handleSelectRows" />
-    </div>
   </NConfigProvider>
 </template>

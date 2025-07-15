@@ -46,12 +46,10 @@ onMounted(fetchFiles)
 </script>
 
 <template>
-	<div class="flex w-full flex-col p-4">
 		<ActiveFileHeader />
 		<Table :data="activeFileTableStore.state.files"
 			:columns="activeFileColumns as TableColumn<Event | ActiveFile>[]"
 			:current-page="activeFileTableStore.state.page" :total="activeFileTableStore.state.totalCount"
 			:page-size="activeFileTableStore.state.limit" :total-pages="activeFileTableStore.state.totalPages"
 			@update:page="handlePageChange" />
-	</div>
 </template>

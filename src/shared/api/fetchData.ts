@@ -68,4 +68,29 @@ export const updateStatus = async (id: number, status: string) => {
   }
 };
 
+export const fetchDetails = async (filePath?: string, inode?: number) => {
+  try {
+    const params = new URLSearchParams()
+    if (filePath) {
+      params.set(`filePath`, filePath)
+    }
+    if (inode) {
+      params.set(`inode`, inode.toString())
+    }
+    const url = `http://localhost:3000/api/active/get/graph/?${params}`
+    const response = await fetch(url)
+    if (!response.ok) {
+      throw Error
+    }
 
+    const data = await response.json()
+    console.log(url);
+
+    console.log(data);
+
+    return data
+  }
+  catch {
+
+  }
+}

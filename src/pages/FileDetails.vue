@@ -1,54 +1,102 @@
 <template>
-    <n-tree block-line :data="data" :default-expanded-keys="defaultExpandedKeys" :render-prefix="renderPrefix"
-        :render-label="renderLabel" :render-suffix="renderSuffix" :selectable="false" />
+    <n-tree v-if="treeData.length > 0" block-line :data="treeData" :default-expanded-keys="defaultExpandedKeys"
+        :selectable="false" :render-label="renderLabel" :render-prefix="renderPrefix" />
+    <n-empty v-else description="No file hierarchy data available">
+        <template #extra>
+            <n-button size="small" @click="loadData">
+                Try to load data
+            </n-button>
+        </template>
+    </n-empty>
 </template>
 
 <script setup lang="ts">
-import type { TreeOption } from 'naive-ui'
-import { NButton } from 'naive-ui'
-import { repeat } from 'seemly'
-import { h, ref } from 'vue'
+import { ref, computed, h } from 'vue';
+import { NTree, NTooltip, NEmpty, NButton } from 'naive-ui';
+import type { FileHierarchyMap, TreeNode } from './type';
+import type { TreeRenderProps } from 'naive-ui/es/tree/src/interface';
 
-const LABELS: Record<number, string> = {
-    4: 'Out of Tao, One is born',
-    3: 'Out of One, Two',
-    2: 'Out of Two, Three',
-    1: 'Out of Three, the created universe'
-}
+const props = defineProps<{
+    fileHierarchy: FileHierarchyMap;
+}>();
 
-function createData(level = 4, baseKey = ''): TreeOption[] | undefined {
-    if (!level) return undefined
-    return repeat(6 - level, undefined).map((_, index) => {
-        const key = `${baseKey}${level}${index}`
-        return {
-            label: LABELS[level] || '',
-            key,
-            children: createData(level - 1, key),
-            level
+const defaultExpandedKeys = ref<string[]>([]);
+
+const treeData = computed<TreeNode[]>(() => {
+    if (!props.fileHierarchy || Object.keys(props.fileHierarchy).length === 0) {
+        return [];
+    }
+
+    const nodes: TreeNode[] = [];
+
+    Object.values(props.fileHierarchy).forEach((hierarchy) => {
+        const parentNode: TreeNode = {
+            key: `parent-${hierarchy.parentFile.id}`,
+            label: hierarchy.parentFile.fileName,
+            fileData: hierarchy.parentFile,
+            children: [],
+        };
+
+        hierarchy.children.forEach((child) => {
+            const childNode: TreeNode = {
+                key: `child-${child.childFile.id}`,
+                label: child.childFile.fileName,
+                fileData: child.childFile,
+                relationshipType: child.relationshipType,
+                isLeaf: true,
+            };
+            parentNode.children?.push(childNode);
+        });
+
+        nodes.push(parentNode);
+        defaultExpandedKeys.value.push(parentNode.key);
+    });
+
+    return nodes;
+});
+
+const renderLabel = ({ option }: TreeRenderProps) => {
+    const node = option as TreeNode;
+    const file = node.fileData;
+    if (!file) return node.label;
+
+    return h(
+        'div',
+        { style: 'display: flex; align-items: center; gap: 8px;' },
+        [
+            h('span', { style: 'font-weight: bold;' }, file.fileName),
+            h('span', { style: 'color: #888; font-size: 0.9em;' }, file.filePath),
+            h('span', { style: 'color: #666; font-size: 0.8em;' }, `${(file.fileSize / 1024).toFixed(2)} KB`),
+            h('span', {
+                style: `color: ${file.status === 'active' ? 'green' :
+                        file.status === 'archived' ? 'orange' : 'red'
+                    }; font-size: 0.8em;`
+            }, file.status),
+        ]
+    );
+};
+
+const renderPrefix = ({ option }: TreeRenderProps) => {
+    const node = option as TreeNode;
+    if (!node.relationshipType) return null;
+
+    return h(
+        NTooltip,
+        { trigger: 'hover' },
+        {
+            trigger: () => h(
+                'span',
+                {
+                    style: 'background: #eee; padding: 2px 6px; border-radius: 4px; font-size: 0.8em;',
+                },
+                node.relationshipType
+            ),
+            default: () => `Relationship type: ${node.relationshipType}`,
         }
-    })
-}
+    );
+};
 
-function renderPrefix({ option }: { option: TreeOption }) {
-    return h(
-        NButton,
-        { text: true, type: 'primary' },
-        { default: () => `Prefix-${option.level}` }
-    )
-}
-
-function renderLabel({ option }: { option: TreeOption }) {
-    return `${option.label} :)`
-}
-
-function renderSuffix({ option }: { option: TreeOption }) {
-    return h(
-        NButton,
-        { text: true, type: 'primary' },
-        { default: () => `Suffix-${option.level}` }
-    )
-}
-
-const data = createData()
-const defaultExpandedKeys = ref(['40', '41'])
+const loadData = () => {
+    console.log('Loading data...');
+};
 </script>

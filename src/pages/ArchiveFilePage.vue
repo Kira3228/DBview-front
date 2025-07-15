@@ -44,11 +44,9 @@ const handlePageChange = (newPage: number) => {
 onMounted(fetchFiles)
 </script>
 <template>
-    <div class="flex w-full flex-col p-4">
         <ArchivedFileHeader />
         <Table :data="archivedFileTableStore.state.files" :current-page="archivedFileTableStore.state.page"
             :total="archivedFileTableStore.state.totalCount" :page-size="archivedFileTableStore.state.limit"
             :total-pages="archivedFileTableStore.state.totalPages" :columns="archiveFileColumns as TableColumn[]"
             @update:page="handlePageChange" />
-    </div>
 </template>
