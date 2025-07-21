@@ -13,16 +13,13 @@ const initialState: EventLog = {
 const useEventLogTableStore = defineStore("eventLogTable", () => {
   const state = ref<EventLog>({ ...initialState });
 
-  // Полное обновление данных
   const updateStore = (newData: Partial<EventLog>) => {
-    // Явное преобразование page к числу, если он присутствует
     if (newData.page !== undefined) {
       newData.page = Number(newData.page);
     }
     state.value = { ...state.value, ...newData };
   };
 
-  // Установка событий
   const setEvents = (events: EventLog["events"]) => {
     state.value.events = events;
   };

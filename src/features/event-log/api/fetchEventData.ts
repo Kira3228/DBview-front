@@ -29,13 +29,13 @@ export const fetchEventLogData = async (
   }
   console.log(eventType);
   if (startDate) {
-    params.set("startDate", startDate.toISOString());
-    console.log("startDate", startDate.toISOString());
+    params.set("startDate", startDate.toISOString().replace('T', ' ').replace('.000Z', ' ').trimEnd());
+    console.log("startDate", startDate.toISOString().replace('T', ' ').replace('.000Z', ' ').trimEnd());
   }
 
   if (endDate) {
-    params.set("endDate", endDate.toISOString());
-    console.log(`endDate`, endDate.toISOString());
+    params.set("endDate", endDate.toISOString().replace('T', ' ').replace('.000Z', ' ').trimEnd());
+    console.log(`endDate`, endDate.toISOString().replace('T', ' ').replace('.000Z', ' ').trimEnd());
   }
 
   const url = `${endpoints.getFiltered}${params.toString()}`;

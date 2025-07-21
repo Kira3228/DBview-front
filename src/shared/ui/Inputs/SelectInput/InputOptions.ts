@@ -2,9 +2,9 @@ import type { TSelectOption } from "./SelectInput.type";
 
 const eventTypeOptions: TSelectOption[] = [
   { label: "Все", value: "" },
-  { label: "Создание", value: "create" },
-  { label: "Изменение", value: "modify" },
-  { label: "Удаление", value: "delete" },
+  { label: "Создание файла", value: "file_added" },
+  { label: "Создание процесса", value: "process_created" },
+  { label: "Отказано в доступе", value: "access_denied" },
 ];
 
 const statusOptions: TSelectOption[] = [

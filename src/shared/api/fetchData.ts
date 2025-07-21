@@ -1,13 +1,13 @@
 import { endpoints } from "../../features/event-log/api/endpoints";
 
-export const fetchData = async (endPoint: string) => {
+export const fetchData = async <T>(endPoint: string) => {
   const response = await fetch(endPoint);
   console.log(endPoint);
 
   if (!response.ok) {
     throw new Error(`HTTP error! Status: ${response.status}`);
   }
-  const result = await response.json();
+  const result: T = await response.json();
   console.log("Raw data:", result);
   return result;
 };
@@ -19,7 +19,7 @@ export const fetchActiveFile = async (path: string = "", inode: number = 0) => {
   if (path) params.set(`filePath`, path);
   if (inode > 0) params.set(`inode`, inode.toString());
 
-  const url = `http://localhost:3000/active-files/active/?${params.toString()}`;
+  const url = `http://localhost:3000/api/active/get/active/?${params.toString()}`;
   console.log(url);
   const response = await fetch(url);
   if (!response.ok) {
@@ -49,7 +49,7 @@ export const fetchArchiveFile = async (
 export const updateStatus = async (id: number, status: string) => {
   try {
     const response = await fetch(
-      `http://localhost:3000/active-files/active/update/${id}`,
+      `http://localhost:3000/api/active/get/active/update/${id}`,
       {
         method: "PATCH",
         headers: {

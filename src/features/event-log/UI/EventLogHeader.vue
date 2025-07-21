@@ -52,7 +52,7 @@ const fetchEventData = async () => {
                     updateFieldAndFetch('carrier', val)
                 }" />
             <SelectInput label="Тип события" :option="options.eventTypeOptions" :value="searchStore.state.eventType"
-                @update:value="(val) => { updateFieldAndFetch(`event-type`, val) }" />
+                @update:value="(val) => { updateFieldAndFetch(`eventType`, val) }" />
             <SelectInput label="Статус" :option="options.statusOptions" :value="searchStore.state.status"
                 @update:value="(val) => { updateFieldAndFetch(`status`, val) }" />
             <DateInput label="Начальная дата" @update:value="val => updateFieldAndFetch('startDate', val)"
