@@ -3,7 +3,7 @@
         <NMenu class="w-56 h-screen sticky top-0" :options="menuOptions" v-model:value="activeKey"
             @update:value="handleMenuSelect" />
 
-        <main class="flex-1 overflow-auto">
+        <main class="flex-1 overflow-auto p-4">
             <router-view />
         </main>
     </div>
@@ -42,9 +42,36 @@ const menuOptions = [
                 label: 'Архив',
                 key: 'archive',
                 route: { name: 'archive' }
+            },
+            {
+                label: 'Детали файла',
+                key: 'details',
+                route: { name: 'details' }
             }
         ]
-    }
+    },
+    {
+        label: 'Настройки',
+        key: 'settings',
+        route: { name: 'settings' }
+    },
+    {
+        label: 'Отчёты',
+        key: 'reports',
+        children: [
+            {
+                label: 'Список событий',
+                key: 'event-log',
+                route: { name: 'event-log' }
+            },
+            {
+                label: 'Цепочки распространения',
+                key: 'event-chains',
+                route: { name: 'event-chains' }
+            },
+        ]
+    },
+
 ];
 
 const handleMenuSelect = (key: string) => {
