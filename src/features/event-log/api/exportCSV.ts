@@ -3,7 +3,6 @@ import { downloadFile } from "../../../shared/lib/downloadFile";
 import { endpoints } from "./endpoints";
 
 export const downloadCSV = async () => {
-  console.log(`качаю всё`);
   await downloadFile(`${endpoints.exportAllCsv}`);
 };
 export const downloadSelectedCSV = async (ids: DataTableRowKey[]) => {

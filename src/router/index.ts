@@ -3,7 +3,7 @@ import Layout from "../Layout/Layout.vue";
 import EventLogPage from "../pages/EventLogPage.vue";
 import ActiveFilePage from "../pages/ActiveFilePage.vue";
 import ArchiveFilePage from "../pages/ArchiveFilePage.vue";
-
+import RoportPage from "../pages/ReportPage.vue";
 import FileDetailsPage from "../pages/FileDetailsPage.vue";
 
 
@@ -45,6 +45,14 @@ const routes = [
         meta: {
           menuKey: "details",
         },
+      },
+      {
+        path: "/report-list",
+        name: "report-list",
+        component: RoportPage,
+        meta: {
+          menuKey: "report-list",
+        }
       },
     ],
   },

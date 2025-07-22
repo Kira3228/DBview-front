@@ -5,5 +5,6 @@ export const endpoints = {
     // getFiltered: `http://localhost:3001/system-log/getFilteredSystemLog/?`,
     getActive: `http://localhost:3000/api/active/get/active/?`,
     getArchive: `http://localhost:3000/api/active/get/archive`,
-    update: ``
+    update: ``,
+    
 }

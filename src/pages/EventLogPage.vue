@@ -25,7 +25,6 @@ const fetchEvents = async () => {
 
     const result: EventLog = await fetchData<EventLog>(
       `http://localhost:3000/api/logs/filtered/?page=${eventLogTableStore.state.page}&status=${searchStore.state.status}`
-      // `http://localhost:3001/system-log/getFilteredSystemLog/?page=${eventLogTableStore.state.page}&status=${searchStore.state.status}`
     );
 
     eventLogTableStore.setEvents(result.events || []);

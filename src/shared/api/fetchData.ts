@@ -94,3 +94,36 @@ export const fetchDetails = async (filePath?: string, inode?: number) => {
 
   }
 }
+
+const downLoadFile = async (endPoint: string) => {
+  try {
+    const response = await fetch(endPoint)
+    if (!response.ok) {
+      throw new Error
+    }
+
+    const blob = await response.blob();
+
+    const disposition = response.headers.get('Content-Disposition');
+    let filename = 'report.docx';
+    if (disposition && disposition.includes('attachment')) {
+      const filenameMatch = /filename="([^"]+)"/.exec(disposition);
+      if (filenameMatch && filenameMatch[1]) {
+        filename = filenameMatch[1];
+      }
+    }
+
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
+
+    link.remove();
+    window.URL.revokeObjectURL(url);
+  }
+  catch (error) {
+
+  }
+}

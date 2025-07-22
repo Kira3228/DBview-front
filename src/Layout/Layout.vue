@@ -1,7 +1,10 @@
 <template>
     <div class="flex min-h-screen">
-        <NMenu class="w-56 h-screen sticky top-0" :options="menuOptions" v-model:value="activeKey"
-            @update:value="handleMenuSelect" />
+        <div class="flex flex-col h-screen sticky top-0">
+            <NMenu class="w-56  sticky top-0" :options="menuOptions" v-model:value="activeKey"
+                @update:value="handleMenuSelect">
+            </NMenu>
+        </div>
 
         <main class="flex-1 overflow-auto p-4">
             <router-view />
@@ -61,8 +64,8 @@ const menuOptions = [
         children: [
             {
                 label: 'Список событий',
-                key: 'event-log',
-                route: { name: 'event-log' }
+                key: 'report-list',
+                route: { name: 'report-list' }
             },
             {
                 label: 'Цепочки распространения',
