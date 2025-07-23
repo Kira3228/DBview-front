@@ -1,10 +1,10 @@
 <script setup lang="ts">
+import type { Column } from '../../store/checkedFieldsStore';
+
 defineProps<{
-    selectedFields: { key: string; label: string }[]
+    selectedFields: Column[]
 }>()
-
 </script>
-
 <template>
     <div>
         <h4>Выбранные поля</h4>
