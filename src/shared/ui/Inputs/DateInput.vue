@@ -12,18 +12,20 @@ const props = defineProps<{
 }>();
 
 const effectiveType = props.type || 'date';
-const timestampValue = computed<number | null | [number, number] | null>(() => {
-    if (props.value === null) {
+
+const timestampValue = computed<number | null | [number, number] | null>
+    (() => {
+        if (props.value === null) {
+            return null;
+        }
+        if (props.value instanceof Date) {
+            return props.value.getTime();
+        }
+        if (Array.isArray(props.value) && props.value.length === 2) {
+            return props.value;
+        }
         return null;
-    }
-    if (props.value instanceof Date) {
-        return props.value.getTime();
-    }
-    if (Array.isArray(props.value) && props.value.length === 2) {
-        return props.value;
-    }
-    return null;
-});
+    });
 
 const handleUpdate = (value: number | null) => {
     const date = value ? new Date(value) : null;

@@ -11,28 +11,29 @@ import { options } from './options';
 import { downloadReport } from '../../event-log/api/downloadReport';
 import { useCheckedFieldStore } from '../../../store/checkedFieldsStore';
 
-// Получаем store
-const checkedFieldStore = useCheckedFieldStore();
-
-// Локальные состояния (остались без изменений)
 const format = ref<string>("");
 const type = ref<string>("");
-const dateRange = ref<[number, number]>([Date.now() - 1, Date.now()]);
-const exceptions = ref<string>("");
+const dateRange = ref<[number, number]>([1183135260000, Date.now()]);
 const isLoading = ref(false);
 const errorMessage = ref<string | null>(null);
+const exceptions = ref<string>("");
 
-// Хэндлеры (без изменений)
+const checkedFieldStore = useCheckedFieldStore();
+
 const handleFormatUpdate = (newVal: string) => {
     format.value = newVal;
     console.log(newVal);
 };
 const handleTypeUpdate = (newVal: string) => {
     type.value = newVal;
-    console.log(newVal);
 };
-const handleUpdateDateRange = (newVal: [number, number]) => {
-    dateRange.value = newVal;
+const handleUpdateDateRange = (newVal: Date | [number, number] | null) => {
+    if (Array.isArray(newVal) && newVal.length === 2) {
+        dateRange.value = newVal;
+        console.log('Диапазон дат в timestamp:', dateRange.value);
+    } else {
+        console.warn('Получено неожиданное значение:', newVal);
+    }
 };
 const handleUpdateExceptionsText = (newVal: string) => {
     exceptions.value = newVal;
@@ -42,13 +43,20 @@ const downloadReports = async () => {
         alert('Пожалуйста, выберите хотя бы одно поле для отчета.');
         return;
     }
+    if (!format.value || format.value === "") {
+        alert("Не выбран формат")
+    }
     isLoading.value = true;
     errorMessage.value = null;
     const params = toSearchString(reportObject.value);
-    downloadReport(type.value, params, `http://localhost:3000/api/reports/`);
+    const dateParams = {
+        startDate: dateRange.value[0],
+        endDate: dateRange.value[1]
+    }
+    downloadReport(format.value, params, `http://localhost:3000/api/reports/`, dateParams.startDate, dateParams.endDate, exceptions.value);
 };
 
-// Создание default DTO (без изменений)
+
 const createDefaultDto = (): TSelectedFields => ({
     id: false,
     eventType: false,
@@ -83,7 +91,6 @@ const createDefaultDto = (): TSelectedFields => ({
     },
 });
 
-// Computed reportObject теперь использует checkedKeys из store
 const reportObject = computed<TSelectedFields>(() => {
     const result = createDefaultDto();
 
@@ -103,22 +110,26 @@ const reportObject = computed<TSelectedFields>(() => {
     return result;
 });
 
-// Watcher: автоматически обновляем state в store при изменении checkedKeys
 watch(() => checkedFieldStore.checkedKeys, () => {
     checkedFieldStore.updateSelectedFields();
 }, { deep: true });
+watch(dateRange, () => {
+    console.log(123123123, dateRange.value[0]);
+    console.log(123123123, dateRange.value[1]);
+
+})
 </script>
 
 <template>
     <div class="min-w-80 border-1 border-solid border-gray-300 p-2.5">
         <h4>Выберите поля для отчета</h4>
-        <!-- v-model привязан к store -->
+
         <NTree v-model:checked-keys="checkedFieldStore.checkedKeys" :data="data" cascade checkable block-line />
         <SelectInput label="Формат" :option="options.formatOption" :value="format"
             @update:value="(val) => { handleFormatUpdate(val) }" />
         <SelectInput label="Тип" :option="options.reportTypes" :value="type"
             @update:value="(val) => { handleTypeUpdate(val) }" />
-        <DateInput :value="dateRange" label="Дата" @update:value="() => handleUpdateDateRange" type="daterange" />
+        <DateInput :value="dateRange" label="Дата" @update:value="handleUpdateDateRange" type="daterange" />
         <SearchInput label="Пути исключения через ;" type="textarea" :model-value="exceptions" @update:model-value="(value) => {
             handleUpdateExceptionsText(value)
         }" />
