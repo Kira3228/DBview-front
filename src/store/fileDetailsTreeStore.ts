@@ -4,7 +4,7 @@ import type { FileHierarchyMap } from "../pages/type";
 
 const initialState: FileHierarchyMap = {};
 
-export const useFileDetailsTreeStore = defineStore(`fileDetailsTree`, () => {
+const useFileDetailsTreeStore = defineStore(`fileDetailsTree`, () => {
     const state = ref<FileHierarchyMap>(initialState); // Removed spread since initialState is already an object
 
     const updateStore = (newData: FileHierarchyMap) => { // Changed Partial<FileHierarchyMap> to FileHierarchyMap
@@ -21,3 +21,4 @@ export const useFileDetailsTreeStore = defineStore(`fileDetailsTree`, () => {
         reset
     };
 });
+export default useFileDetailsTreeStore

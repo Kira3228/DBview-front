@@ -1,31 +1,31 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'; // Добавил watch для автоматического обновления store
+import { computed, ref, watch } from 'vue';
 import { data } from '../../../pages/mock';
-import { NButton, NTree } from 'naive-ui';
+import { NButton, NInput, NSlider, NSpace, NTree } from 'naive-ui';
 import { toSearchString } from '../../../pages/helpers';
 import type { TSelectedFields } from '../../../shared/lib/types/SelectedFields';
 import SelectInput from '../../../shared/ui/Inputs/SelectInput/SelectInput.vue';
 import DateInput from '../../../shared/ui/Inputs/DateInput.vue';
 import SearchInput from '../../../shared/ui/Inputs/SearchInput.vue';
 import { options } from './options';
-import { downloadReport } from '../../event-log/api/downloadReport';
-import { useCheckedFieldStore } from '../../../store/checkedFieldsStore';
+import { downloadChainsReport, downloadReport } from '../../event-log/api/downloadReport';
+import { useCheckedFieldStore, useReportTypeStore } from '../../../store';
+
 
 const format = ref<string>("");
-const type = ref<string>("");
 const dateRange = ref<[number, number]>([1183135260000, Date.now()]);
 const isLoading = ref(false);
 const errorMessage = ref<string | null>(null);
-const exceptions = ref<string>("");
+const fileExceptions = ref<string>("");
+const processExceptions = ref<string>("");
+const sliderValue = ref<number[]>([1, 2])
 
 const checkedFieldStore = useCheckedFieldStore();
+const reportTypeStore = useReportTypeStore()
 
 const handleFormatUpdate = (newVal: string) => {
     format.value = newVal;
     console.log(newVal);
-};
-const handleTypeUpdate = (newVal: string) => {
-    type.value = newVal;
 };
 const handleUpdateDateRange = (newVal: Date | [number, number] | null) => {
     if (Array.isArray(newVal) && newVal.length === 2) {
@@ -35,27 +35,63 @@ const handleUpdateDateRange = (newVal: Date | [number, number] | null) => {
         console.warn('Получено неожиданное значение:', newVal);
     }
 };
-const handleUpdateExceptionsText = (newVal: string) => {
-    exceptions.value = newVal;
+const handleUpdateFileExceptionsText = (newVal: string) => {
+    fileExceptions.value = newVal;
+};
+const handleUpdateProcessExceptionsText = (newVal: string) => {
+    processExceptions.value = newVal;
 };
 const downloadReports = async () => {
-    if (checkedFieldStore.checkedKeys.length === 0) {
-        alert('Пожалуйста, выберите хотя бы одно поле для отчета.');
-        return;
-    }
     if (!format.value || format.value === "") {
         alert("Не выбран формат")
     }
-    isLoading.value = true;
-    errorMessage.value = null;
-    const params = toSearchString(reportObject.value);
-    const dateParams = {
-        startDate: dateRange.value[0],
-        endDate: dateRange.value[1]
-    }
-    downloadReport(format.value, params, `http://localhost:3000/api/reports/`, dateParams.startDate, dateParams.endDate, exceptions.value);
-};
+    if (reportTypeStore.state === `event`) {
+        if (checkedFieldStore.checkedKeys.length === 0) {
+            alert('Пожалуйста, выберите хотя бы одно поле для отчета.');
+            return;
+        }
 
+        isLoading.value = true;
+        errorMessage.value = null;
+        const params = toSearchString(reportObject.value);
+        const dateParams = {
+            startDate: dateRange.value[0],
+            endDate: dateRange.value[1]
+        }
+        downloadReport(
+            format.value,
+            params,
+            `http://localhost:3000/api/reports/`,
+            dateParams.startDate,
+            dateParams.endDate,
+            fileExceptions.value,
+            processExceptions.value
+        );
+    } else {
+        isLoading.value = true;
+        errorMessage.value = null;
+        const dateParams = {
+            startDate: dateRange.value[0],
+            endDate: dateRange.value[1]
+        }
+        downloadChainsReport(
+            format.value,
+            `http://localhost:3000/api/reports/chains/`,
+            dateParams.startDate,
+            dateParams.endDate,
+            sliderValue.value
+        )
+    }
+};
+const handleUpdateSlider = (newVal: number[]) => {
+    sliderValue.value = newVal
+}
+const handleUpdateLeftInput = (newVal: number) => {
+    sliderValue.value[0] = newVal
+}
+const handleUpdateRightInput = (newVal: number) => {
+    sliderValue.value[1] = newVal
+}
 
 const createDefaultDto = (): TSelectedFields => ({
     id: false,
@@ -113,26 +149,39 @@ const reportObject = computed<TSelectedFields>(() => {
 watch(() => checkedFieldStore.checkedKeys, () => {
     checkedFieldStore.updateSelectedFields();
 }, { deep: true });
-watch(dateRange, () => {
-    console.log(123123123, dateRange.value[0]);
-    console.log(123123123, dateRange.value[1]);
 
-})
 </script>
 
 <template>
     <div class="min-w-80 border-1 border-solid border-gray-300 p-2.5">
         <h4>Выберите поля для отчета</h4>
-
-        <NTree v-model:checked-keys="checkedFieldStore.checkedKeys" :data="data" cascade checkable block-line />
+        <SelectInput label="Тип" :option="options.reportTypes" :value="reportTypeStore.state"
+            @update:value="(val) => { reportTypeStore.updateStore(val) }" />
         <SelectInput label="Формат" :option="options.formatOption" :value="format"
             @update:value="(val) => { handleFormatUpdate(val) }" />
-        <SelectInput label="Тип" :option="options.reportTypes" :value="type"
-            @update:value="(val) => { handleTypeUpdate(val) }" />
+
+        <NTree v-if="reportTypeStore.state === `event`" v-model:checked-keys="checkedFieldStore.checkedKeys"
+            :data="data" cascade checkable block-line />
         <DateInput :value="dateRange" label="Дата" @update:value="handleUpdateDateRange" type="daterange" />
-        <SearchInput label="Пути исключения через ;" type="textarea" :model-value="exceptions" @update:model-value="(value) => {
-            handleUpdateExceptionsText(value)
-        }" />
-        <NButton @click="downloadReports">Скачать</NButton>
+        <n-space vertical>
+            <n-slider @update-value="handleUpdateSlider" :value="sliderValue" range :step="1" />
+            <n-space>
+                <NInput @update-value="(newVal) => handleUpdateLeftInput(Number(newVal))"
+                    :value="String(sliderValue[0])" size="small" />
+                <NInput @update-value="(newVal) => handleUpdateRightInput(Number(newVal))"
+                    :value="String(sliderValue[1])" size="small" />
+            </n-space>
+        </n-space>
+        <SearchInput v-if="reportTypeStore.state === `event`" label="Исключения путей файлов через ;" placeholder=""
+            type="textarea" :model-value="fileExceptions" @update:model-value="(value) => {
+                handleUpdateFileExceptionsText(value)
+            }" />
+        <SearchInput v-if="reportTypeStore.state === `event`" label="Исключения путей процессов через ;" placeholder=""
+            type="textarea" :model-value="processExceptions" @update:model-value="(value) => {
+                handleUpdateProcessExceptionsText(value)
+            }" />
+        <div class="mt-1.5 w-full flex flex-col">
+            <NButton strong secondary type="primary" class="w-full" @click="downloadReports">Скачать</NButton>
+        </div>
     </div>
 </template>

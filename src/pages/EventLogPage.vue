@@ -59,11 +59,11 @@ onMounted(fetchEvents);
 </script>
 
 <template>
-  <NConfigProvider>
+
     <EventLogHeader />
     <Table :data="eventLogTableStore.state.events" :current-page="eventLogTableStore.state.page"
       :columns="columns as TableColumn<Event | ActiveFile>[]" :total="eventLogTableStore.state.totalCount"
       :page-size="eventLogTableStore.state.limit" :total-pages="eventLogTableStore.state.totalPages"
       @update:page="handlePageChange" @select:rows="handleSelectRows" />
-  </NConfigProvider>
+
 </template>

@@ -9,7 +9,7 @@ export type Column = {
     label: string;
 };
 
-export const useCheckedFieldStore = defineStore('checked-store', () => {
+const useCheckedFieldStore = defineStore('checked-store', () => {
     const checkedKeys = ref<string[]>([]);
     const state = ref<Column[]>([]);
 
@@ -44,7 +44,7 @@ export const useCheckedFieldStore = defineStore('checked-store', () => {
     };
     const setCheckedKeys = (newKeys: string[]) => {
         checkedKeys.value = newKeys;
-        updateSelectedFields(); 
+        updateSelectedFields();
     };
     return {
         state,
@@ -54,3 +54,4 @@ export const useCheckedFieldStore = defineStore('checked-store', () => {
         setCheckedKeys,
     };
 });
+export default useCheckedFieldStore

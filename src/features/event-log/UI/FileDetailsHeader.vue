@@ -4,7 +4,7 @@ import { useDebounce } from '../../../shared/lib/debounce';
 import { SearchInput } from '../../../shared/ui';
 import { fetchDetails } from '../../../shared/api/fetchData';
 import useFileDetailsSearchStore from '../../../store/fileDetailsSearchStore';
-import { useFileDetailsTreeStore } from '../../../store/fileDetailsTreeStore';
+import { useFileDetailsTreeStore } from '../../../store/';
 
 const fileDetailsSearchStore = useFileDetailsSearchStore()
 const fileDetailsTreeStore = useFileDetailsTreeStore()

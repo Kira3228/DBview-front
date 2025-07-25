@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NDatePicker } from 'naive-ui';
+import { NDatePicker, NInputGroup } from 'naive-ui';
 import { computed, defineEmits, defineProps } from 'vue';
 
 const emit = defineEmits<{
@@ -38,10 +38,14 @@ const handleUpdateRange = (value: [number, number] | null) => {
 </script>
 
 <template>
-    <div>
-        <label class="text-xs text-gray-400" for="date">{{ label }}</label>
-        <NDatePicker v-if="effectiveType === 'date'" id="date" :value="timestampValue" @update:value="handleUpdate" />
-        <NDatePicker v-else-if="effectiveType === 'daterange'" type="daterange" clearable :value="timestampValue"
-            @update:value="handleUpdateRange" />
-    </div>
+
+        <div>
+
+            <label class="text-xs text-gray-400" for="date">{{ label }}</label>
+            <NDatePicker v-if="effectiveType === 'date'" id="date" :value="timestampValue"
+                @update:value="handleUpdate" />
+            <NDatePicker v-else-if="effectiveType === 'daterange'" type="daterange" clearable :value="timestampValue"
+                @update:value="handleUpdateRange" />
+        </div>
+
 </template>

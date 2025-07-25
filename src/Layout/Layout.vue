@@ -1,19 +1,21 @@
 <template>
-    <div class="flex min-h-screen">
-        <div class="flex flex-col h-screen sticky top-0">
-            <NMenu class="w-56  sticky top-0" :options="menuOptions" v-model:value="activeKey"
-                @update:value="handleMenuSelect">
-            </NMenu>
+    <NLayout>
+        <div class="flex min-h-screen">
+            <div class="flex flex-col h-screen sticky top-0">
+                <NMenu class="w-56  sticky top-0" :options="menuOptions" v-model:value="activeKey"
+                    @update:value="handleMenuSelect">
+                </NMenu>
+            </div>
+            <main class="flex-1 overflow-auto p-4">
+                <router-view />
+            </main>
         </div>
+    </NLayout>
 
-        <main class="flex-1 overflow-auto p-4">
-            <router-view />
-        </main>
-    </div>
 </template>
 
 <script setup lang="ts">
-import { NMenu } from 'naive-ui';
+import { NConfigProvider, NLayout, NMenu } from 'naive-ui';
 import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
