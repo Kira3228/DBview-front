@@ -20,7 +20,7 @@ const fetchFiles = async () => {
 	try {
 		isLoading.value = true
 		const result: ActiveFileRes = await fetchData(
-			`${endpoints.getActive}${activeFileSearchStore.state.filePath}`
+			`${endpoints.getActive}${activeFileSearchStore.state.filePath}&filePathException=${localStorage.getItem(`filePath`)}`
 		)
 		activeFileTableStore.setFiles(result.files)
 		console.log(`активные файлы`, result.files)
@@ -46,10 +46,9 @@ onMounted(fetchFiles)
 </script>
 
 <template>
-		<ActiveFileHeader />
-		<Table :data="activeFileTableStore.state.files"
-			:columns="activeFileColumns as TableColumn<Event | ActiveFile>[]"
-			:current-page="activeFileTableStore.state.page" :total="activeFileTableStore.state.totalCount"
-			:page-size="activeFileTableStore.state.limit" :total-pages="activeFileTableStore.state.totalPages"
-			@update:page="handlePageChange" />
+	<ActiveFileHeader />
+	<Table :data="activeFileTableStore.state.files" :columns="activeFileColumns as TableColumn<Event | ActiveFile>[]"
+		:current-page="activeFileTableStore.state.page" :total="activeFileTableStore.state.totalCount"
+		:page-size="activeFileTableStore.state.limit" :total-pages="activeFileTableStore.state.totalPages"
+		@update:page="handlePageChange" />
 </template>

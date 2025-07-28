@@ -1,12 +1,10 @@
-<template>
-    <FileDetailsHeader />
-    <FileDetails :file-hierarchy="fileHierarchyData" />
-</template>
-
 <script setup lang="ts">
+import { onMounted, ref } from 'vue';
 import FileDetailsHeader from '../features/event-log/UI/FileDetailsHeader.vue';
+import { fetchData, fetchDetails } from '../shared/api/fetchData';
 import FileDetails from './FileDetails.vue';
 import type { FileHierarchyMap } from './type';
+import { useFileDetailsSearchStore, useFileDetailsTreeStore } from '../store';
 
 const fileHierarchyData: FileHierarchyMap = {
     "1": {
@@ -485,5 +483,25 @@ const fileHierarchyData: FileHierarchyMap = {
         ]
     }
 };
+const graphStore = useFileDetailsTreeStore()
+const searchStore = useFileDetailsSearchStore()
 
+
+
+const fetchGraph = async () => {
+    const data = await fetchDetails(
+        searchStore.state.filePath,
+        searchStore.state.inode,
+        localStorage.getItem(`filePath`) as string
+    )
+    graphStore.updateStore(data)
+}
+onMounted(() => {
+    fetchGraph()
+})
 </script>
+
+<template>
+    <FileDetailsHeader />
+    <FileDetails :file-hierarchy="graphStore.state" />
+</template>

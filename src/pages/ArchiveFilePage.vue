@@ -20,7 +20,7 @@ const fetchFiles = async () => {
     try {
         isLoading.value = true
         const result: ActiveFileRes = await fetchData(
-            `${endpoints.getArchive}`
+            `${endpoints.getArchive}/?filePathException=${localStorage.getItem(`filePath`)}`
         )
         archivedFileTableStore.setFiles(result.files)
         console.log(`архивированные файлы`, result.files)

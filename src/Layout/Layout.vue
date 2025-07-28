@@ -1,10 +1,14 @@
 <template>
     <NLayout>
         <div class="flex min-h-screen">
-            <div class="flex flex-col h-screen sticky top-0">
+
+            <div class="flex flex-col h-screen sticky top-0 justify-between">
                 <NMenu class="w-56  sticky top-0" :options="menuOptions" v-model:value="activeKey"
                     @update:value="handleMenuSelect">
                 </NMenu>
+                <div class="fixed top-[95%]">
+                    <ThemeSwitch class="" />
+                </div>
             </div>
             <main class="flex-1 overflow-auto p-4">
                 <router-view />
@@ -15,9 +19,10 @@
 </template>
 
 <script setup lang="ts">
-import { NConfigProvider, NLayout, NMenu } from 'naive-ui';
+import { NLayout, NMenu, NSwitch } from 'naive-ui';
 import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import ThemeSwitch from '../shared/ui/Inputs/ThemeSwitch.vue';
 
 const router = useRouter();
 const route = useRoute();

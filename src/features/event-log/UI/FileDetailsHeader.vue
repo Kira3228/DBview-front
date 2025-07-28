@@ -27,8 +27,6 @@ const updateFieldAndFetch = (field: 'filePath' | 'inode', value: string | number
     fileDetailsSearchStore.updateField(field, value)
     debounce(() => {
         fetchData()
-        console.log(123231213321);
-
     })
 }
 </script>

@@ -11,9 +11,8 @@ import { options } from './options';
 import { downloadChainsReport, downloadReport } from '../../event-log/api/downloadReport';
 import { useCheckedFieldStore, useReportTypeStore } from '../../../store';
 
-
 const format = ref<string>("");
-const dateRange = ref<[number, number]>([1183135260000, Date.now()]);
+const dateRange = ref<[number, number]>([1756135260000, Date.now()]);
 const isLoading = ref(false);
 const errorMessage = ref<string | null>(null);
 const fileExceptions = ref<string>("");
@@ -153,8 +152,7 @@ watch(() => checkedFieldStore.checkedKeys, () => {
 </script>
 
 <template>
-    <div class="min-w-80 border-1 border-solid border-gray-300 p-2.5">
-        <h4>Выберите поля для отчета</h4>
+    <div class="min-w-80 border-1 border-solid border-emerald-300 rounded-sm p-2.5">
         <SelectInput label="Тип" :option="options.reportTypes" :value="reportTypeStore.state"
             @update:value="(val) => { reportTypeStore.updateStore(val) }" />
         <SelectInput label="Формат" :option="options.formatOption" :value="format"
@@ -163,15 +161,17 @@ watch(() => checkedFieldStore.checkedKeys, () => {
         <NTree v-if="reportTypeStore.state === `event`" v-model:checked-keys="checkedFieldStore.checkedKeys"
             :data="data" cascade checkable block-line />
         <DateInput :value="dateRange" label="Дата" @update:value="handleUpdateDateRange" type="daterange" />
-        <n-space vertical>
-            <n-slider @update-value="handleUpdateSlider" :value="sliderValue" range :step="1" />
-            <n-space>
+        <div v-if="reportTypeStore.state === `chains`">
+            <label class="text-xs text-gray-400" for="event-type">Глубина</label>
+            <NSlider class="my-1" @update-value="handleUpdateSlider" :value="sliderValue" range :step="1" />
+            <div class="flex justify-between gap-4">
                 <NInput @update-value="(newVal) => handleUpdateLeftInput(Number(newVal))"
                     :value="String(sliderValue[0])" size="small" />
                 <NInput @update-value="(newVal) => handleUpdateRightInput(Number(newVal))"
                     :value="String(sliderValue[1])" size="small" />
-            </n-space>
-        </n-space>
+            </div>
+        </div>
+
         <SearchInput v-if="reportTypeStore.state === `event`" label="Исключения путей файлов через ;" placeholder=""
             type="textarea" :model-value="fileExceptions" @update:model-value="(value) => {
                 handleUpdateFileExceptionsText(value)

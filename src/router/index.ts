@@ -5,6 +5,7 @@ import ActiveFilePage from "../pages/ActiveFilePage.vue";
 import ArchiveFilePage from "../pages/ArchiveFilePage.vue";
 import RoportPage from "../pages/ReportPage.vue";
 import FileDetailsPage from "../pages/FileDetailsPage.vue";
+import SettingsPage from "../pages/SettingsPage.vue";
 
 
 const routes = [
@@ -52,6 +53,14 @@ const routes = [
         component: RoportPage,
         meta: {
           menuKey: "report-list",
+        }
+      },
+      {
+        path: "/settings",
+        name: "settings",
+        component: SettingsPage,
+        meta: {
+          menuKey: "settings",
         }
       },
     ],

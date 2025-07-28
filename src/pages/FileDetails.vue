@@ -1,6 +1,7 @@
 <template>
     <n-tree v-if="treeData.length > 0" block-line :data="treeData" :default-expanded-keys="defaultExpandedKeys"
-        :selectable="false" :render-label="renderLabel" :render-prefix="renderPrefix" />
+        :selectable="false" :render-label="renderLabel" />
+    <!-- :selectable="false" :render-label="renderLabel" :render-prefix="renderPrefix" /> -->
     <n-empty v-else description="No file hierarchy data available">
         <template #extra>
             <n-button size="small" @click="loadData">
@@ -17,7 +18,7 @@ import type { FileHierarchyMap, TreeNode } from './type';
 import type { TreeRenderProps } from 'naive-ui/es/tree/src/interface';
 
 const props = defineProps<{
-    fileHierarchy: FileHierarchyMap;
+    fileHierarchy: FileHierarchyMap | undefined;
 }>();
 
 const defaultExpandedKeys = ref<string[]>([]);
@@ -69,32 +70,32 @@ const renderLabel = ({ option }: TreeRenderProps) => {
             h('span', { style: 'color: #666; font-size: 0.8em;' }, `${(file.fileSize / 1024).toFixed(2)} KB`),
             h('span', {
                 style: `color: ${file.status === 'active' ? 'green' :
-                        file.status === 'archived' ? 'orange' : 'red'
+                    file.status === 'archived' ? 'orange' : 'red'
                     }; font-size: 0.8em;`
             }, file.status),
         ]
     );
 };
 
-const renderPrefix = ({ option }: TreeRenderProps) => {
-    const node = option as TreeNode;
-    if (!node.relationshipType) return null;
+// const renderPrefix = ({ option }: TreeRenderProps) => {
+//     const node = option as TreeNode;
+//     if (!node.relationshipType) return null;
+//     return h(
+//         NTooltip,
+//         { trigger: 'hover' },
+//         {
+//             trigger: () => h(
+//                 'span',
+//                 {
+//                     style: 'background: #eee; padding: 2px 6px; border-radius: 4px; font-size: 0.8em;',
+//                 },
+//                 node.relationshipType
+//             ),
+//             default: () => `Relationship type: ${node.relationshipType}`,
+//         }
+//     );
 
-    return h(
-        NTooltip,
-        { trigger: 'hover' },
-        {
-            trigger: () => h(
-                'span',
-                {
-                    style: 'background: #eee; padding: 2px 6px; border-radius: 4px; font-size: 0.8em;',
-                },
-                node.relationshipType
-            ),
-            default: () => `Relationship type: ${node.relationshipType}`,
-        }
-    );
-};
+// };
 
 const loadData = () => {
     console.log('Loading data...');

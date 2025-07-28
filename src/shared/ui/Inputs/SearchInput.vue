@@ -6,7 +6,7 @@ const props = defineProps<{
   modelValue: string;
   placeholder?: string;
   label?: string
-  type?: string
+  type?: "text" | "textarea"
 }>();
 
 const defaultType = props.type || "text"

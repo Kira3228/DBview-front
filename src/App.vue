@@ -1,26 +1,16 @@
 <script setup lang="ts">
-import { NButton, NConfigProvider, darkTheme, type GlobalThemeOverrides, } from 'naive-ui'
-import { ref, watch } from 'vue'
+import { NButton, NConfigProvider, darkTheme, } from 'naive-ui'
+import { computed, ref, watch } from 'vue'
+import { useTheme } from './store'
+const themeStore = useTheme()
 
-const currentTheme = ref(darkTheme) // null = светлая, darkTheme = тёмная
-
-
-// Следим за сменой темы и обновляем фон страницы
-watch(currentTheme, (newTheme) => {
-  document.body.style.backgroundColor = newTheme === darkTheme
-    ? '#101014'  // Тёмный фон (можно заменить на любой)
-    : '#ffffff'  // Светлый фон
+const currentTheme = computed(() => {
+  return themeStore.state ? darkTheme : null
 })
+
 </script>
 <template>
   <NConfigProvider :theme="currentTheme">
-
     <router-view />
   </NConfigProvider>
 </template>
-
-<style>
-body {
-  /* background-color: #101016; */
-}
-</style>

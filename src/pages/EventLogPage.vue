@@ -19,12 +19,14 @@ const searchStore = useSearchStore()
 const selectEventRows = useSelectEventLogStore()
 const error = ref(false);
 const isLoading = ref(false);
+const filePathexception = localStorage.getItem(`filePath`)
+const processPathexception = localStorage.getItem(`processPath`)
 const fetchEvents = async () => {
   try {
     isLoading.value = true;
 
     const result: EventLog = await fetchData<EventLog>(
-      `http://localhost:3000/api/logs/filtered/?page=${eventLogTableStore.state.page}&status=${searchStore.state.status}`
+      `http://localhost:3000/api/logs/filtered/?page=${eventLogTableStore.state.page}&status=${searchStore.state.status}&filePathException=${filePathexception}&processPathException=${processPathexception}`
     );
 
     eventLogTableStore.setEvents(result.events || []);
@@ -60,10 +62,10 @@ onMounted(fetchEvents);
 
 <template>
 
-    <EventLogHeader />
-    <Table :data="eventLogTableStore.state.events" :current-page="eventLogTableStore.state.page"
-      :columns="columns as TableColumn<Event | ActiveFile>[]" :total="eventLogTableStore.state.totalCount"
-      :page-size="eventLogTableStore.state.limit" :total-pages="eventLogTableStore.state.totalPages"
-      @update:page="handlePageChange" @select:rows="handleSelectRows" />
+  <EventLogHeader />
+  <Table :data="eventLogTableStore.state.events" :current-page="eventLogTableStore.state.page"
+    :columns="columns as TableColumn<Event | ActiveFile>[]" :total="eventLogTableStore.state.totalCount"
+    :page-size="eventLogTableStore.state.limit" :total-pages="eventLogTableStore.state.totalPages"
+    @update:page="handlePageChange" @select:rows="handleSelectRows" />
 
 </template>

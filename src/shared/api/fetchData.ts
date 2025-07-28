@@ -1,3 +1,4 @@
+import { toSearchString } from './../../pages/helpers';
 import { endpoints } from "../../features/event-log/api/endpoints";
 
 export const fetchData = async <T>(endPoint: string) => {
@@ -68,7 +69,7 @@ export const updateStatus = async (id: number, status: string) => {
   }
 };
 
-export const fetchDetails = async (filePath?: string, inode?: number) => {
+export const fetchDetails = async (filePath?: string, inode?: number, filePathExceptions?: string) => {
   try {
     const params = new URLSearchParams()
     if (filePath) {
@@ -76,6 +77,9 @@ export const fetchDetails = async (filePath?: string, inode?: number) => {
     }
     if (inode) {
       params.set(`inode`, inode.toString())
+    }
+    if (filePathExceptions) {
+      params.set(`filePathExceptions`, filePathExceptions)
     }
     const url = `http://localhost:3000/api/active/get/graph/?${params}`
     const response = await fetch(url)

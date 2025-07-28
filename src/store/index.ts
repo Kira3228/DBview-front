@@ -9,3 +9,4 @@ export { default as useReportTypeStore } from "./reportTypeStore"
 export { default as useEventLogTableStore } from "./eventLogTableStore";
 export { default as useSearchStore } from "./searchStore";
 export { default as useSelectEventLogStore } from "./selectedEventLogRowsStore";
+export { default as useTheme } from "./themeStore";
