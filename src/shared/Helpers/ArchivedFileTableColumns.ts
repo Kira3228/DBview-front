@@ -1,9 +1,8 @@
-import { NSelect, NTag, type DataTableColumn } from "naive-ui";
-import type { ActiveFile } from "../shared/lib/types/ActiveFile";
 import { h } from "vue";
-import { updateStatus } from "../shared/api/fetchData";
+import type { ActiveFile } from "../lib/types/ActiveFile";
+import { NTag, type DataTableColumn } from "naive-ui";
 
-export const archiveFileColumns: DataTableColumn<ActiveFile>[] = [
+const archiveFileColumns: DataTableColumn<ActiveFile>[] = [
   { title: "ID", key: "id", width: 80 },
   {
     title: `Путь`,
@@ -36,7 +35,6 @@ export const archiveFileColumns: DataTableColumn<ActiveFile>[] = [
       );
     },
   },
-  
 ];
 
-
+export default archiveFileColumns

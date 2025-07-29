@@ -1,9 +1,9 @@
 import type { DataTableColumn } from "naive-ui";
-import type { Event } from "../shared/lib/types/EventLog";
 import { h } from "vue";
 import { NCode } from "naive-ui";
+import type { Event } from "../lib/types/EventLog";
 
-export const columns: DataTableColumn<Event>[] = [
+const columns: DataTableColumn<Event>[] = [
   {
     type: "selection",
     options: ["all", "none"],
@@ -74,3 +74,5 @@ export const columns: DataTableColumn<Event>[] = [
     resizable: true,
   },
 ];
+
+export default columns

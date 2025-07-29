@@ -1,22 +1,21 @@
 <script setup lang="ts">
 import { NButton, NButtonGroup } from 'naive-ui';
+import { useActiveFileSearchStore, useActiveFileTableStore } from '../../../store';
 import { useDebounce } from '../../../shared/lib/debounce';
 import { SearchInput } from '../../../shared/ui';
-import { fetchDetails } from '../../../shared/api/fetchData';
-import useFileDetailsSearchStore from '../../../store/fileDetailsSearchStore';
-import { useFileDetailsTreeStore } from '../../../store/';
+import { fetchActiveFile } from '../../event-log/api/fetchActiveFile';
 
-const fileDetailsSearchStore = useFileDetailsSearchStore()
-const fileDetailsTreeStore = useFileDetailsTreeStore()
+const activeFileSearchStore = useActiveFileSearchStore()
+const activeFileTableStore = useActiveFileTableStore()
 const { debounce } = useDebounce()
 
 const fetchData = async () => {
     try {
-        const data = await fetchDetails(
-            fileDetailsSearchStore.state.filePath,
-            fileDetailsSearchStore.state.inode
+        const data = await fetchActiveFile(
+            activeFileSearchStore.state.filePath,
+            activeFileSearchStore.state.inode
         )
-        fileDetailsTreeStore.updateStore(data)
+        activeFileTableStore.updateStore(data)
     }
     catch (error) {
         console.error("Error fetching data:", error);
@@ -24,10 +23,8 @@ const fetchData = async () => {
 }
 
 const updateFieldAndFetch = (field: 'filePath' | 'inode', value: string | number) => {
-    fileDetailsSearchStore.updateField(field, value)
-    debounce(() => {
-        fetchData()
-    })
+    activeFileSearchStore.updateField(field, value)
+    debounce(fetchData)
 }
 </script>
 
@@ -39,9 +36,9 @@ const updateFieldAndFetch = (field: 'filePath' | 'inode', value: string | number
             <NButton size="small"> Архивировать </NButton>
         </NButtonGroup>
         <div class="flex gap-8">
-            <SearchInput label="Путь" placeholder="Путь" :model-value="fileDetailsSearchStore.state.filePath"
+            <SearchInput label="Путь" placeholder="Путь" :model-value="activeFileSearchStore.state.filePath"
                 @update:modelValue="(val) => updateFieldAndFetch('filePath', val)" id='filePath' />
-            <SearchInput label="Inode" placeholder="Inode" :model-value="fileDetailsSearchStore.state.inode.toString()"
+            <SearchInput label="Inode" placeholder="Inode" :model-value="activeFileSearchStore.state.inode.toString()"
                 @update:modelValue="(val) => updateFieldAndFetch('inode', val)" id='inode' />
         </div>
     </div>

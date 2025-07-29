@@ -1,10 +1,9 @@
-import type { TSelectedFields } from "../shared/lib/types/SelectedFields"
+import type { TSelectedFields } from "../../../shared/lib/types/SelectedFields"
 
 
 export const toSearchString = (fields: TSelectedFields) => {
     const params = new URLSearchParams()
 
-    // Верхний уровень
     if (fields.id) params.set('id', String(fields.id))
     if (fields.eventType) params.set('eventType', String(fields.eventType))
     if (fields.eventData) params.set('eventData', String(fields.eventData))
@@ -12,7 +11,6 @@ export const toSearchString = (fields: TSelectedFields) => {
     if (fields.source) params.set('source', String(fields.source))
     if (fields.timestamp) params.set('timestamp', String(fields.timestamp))
 
-    // relatedFileId
     if (fields.relatedFileId) {
         const rf = fields.relatedFileId
         if (rf.id) params.set('relatedFileId[id]', String(rf.id))
@@ -30,7 +28,6 @@ export const toSearchString = (fields: TSelectedFields) => {
         if (rf.extendedAttributes) params.set('relatedFileId[extendedAttributes]', String(rf.extendedAttributes))
     }
 
-    // relatedProcessId
     if (fields.relatedProcessId) {
         const rp = fields.relatedProcessId
         if (rp.id) params.set('relatedProcessId[id]', String(rp.id))

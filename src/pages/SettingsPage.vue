@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref } from 'vue';
 import { SearchInput } from '../shared/ui';
 import { useDebounce } from '../shared/lib/debounce';
 
@@ -7,19 +7,23 @@ type TExceptions = {
     filePath: string
     processPath: string
 }
+
+const { debounce } = useDebounce()
+
 const exceptions = ref<TExceptions>({
     filePath: "",
     processPath: ""
 })
-const { debounce } = useDebounce()
 
 const handleExceptionsUpdate = (field: keyof TExceptions, newVal: string) => {
     exceptions.value[field] = newVal
     debounce(() => { saveExceptions(field, newVal) }, 300)
 }
+
 const saveExceptions = (field: keyof TExceptions, val: string) => {
     localStorage.setItem(field, val)
 }
+
 onMounted(() => {
     exceptions.value.processPath = localStorage.getItem(`processPath`) as string
     exceptions.value.filePath = localStorage.getItem(`filePath`) as string

@@ -1,9 +1,9 @@
 import { NSelect, NTag, type DataTableColumn } from "naive-ui";
-import type { ActiveFile } from "../shared/lib/types/ActiveFile";
 import { h } from "vue";
-import { updateStatus } from "../shared/api/fetchData";
+import { updateStatus } from "../api/fetchData";
+import type { ActiveFile } from "../lib/types/ActiveFile";
 
-export const activeFileColumns: DataTableColumn<ActiveFile>[] = [
+const activeFileColumns: DataTableColumn<ActiveFile>[] = [
   { title: "ID", key: "id", width: 80 },
   {
     title: `Путь`,
@@ -48,8 +48,6 @@ export const activeFileColumns: DataTableColumn<ActiveFile>[] = [
           console.log(newStatus);
           row.status = newStatus;
           updateStatus(row.id, row.status);
-          // Тут можно отправить обновление на сервер, если нужно
-          // например: updateStatus(row.id, newStatus)
         },
       });
     },
@@ -61,3 +59,5 @@ const statusOptions = [
   { label: "archived", value: "archived" },
   { label: "deleted", value: "deleted" },
 ];
+
+export default activeFileColumns

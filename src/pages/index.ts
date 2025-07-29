@@ -1,0 +1,6 @@
+export { default as ActiveFilePage } from "./ActiveFilePage.vue"
+export { default as ArchiveFilePage } from "./ArchiveFilePage.vue"
+export { default as EventLogPage } from "./EventLogPage.vue"
+export { default as FileDetailsPage } from "./FileDetailsPage.vue"
+export { default as ReportPage } from "./ReportPage.vue"
+export { default as SettingsPage } from "./SettingsPage.vue"

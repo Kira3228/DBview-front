@@ -1,11 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Layout from "../Layout/Layout.vue";
-import EventLogPage from "../pages/EventLogPage.vue";
-import ActiveFilePage from "../pages/ActiveFilePage.vue";
-import ArchiveFilePage from "../pages/ArchiveFilePage.vue";
-import RoportPage from "../pages/ReportPage.vue";
-import FileDetailsPage from "../pages/FileDetailsPage.vue";
-import SettingsPage from "../pages/SettingsPage.vue";
+
+import { ActiveFilePage, ArchiveFilePage, EventLogPage, FileDetailsPage, SettingsPage, ReportPage } from "../pages";
 
 
 const routes = [
@@ -50,7 +46,7 @@ const routes = [
       {
         path: "/report-list",
         name: "report-list",
-        component: RoportPage,
+        component: ReportPage,
         meta: {
           menuKey: "report-list",
         }

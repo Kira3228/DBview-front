@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { NButton, NConfigProvider, darkTheme, } from 'naive-ui'
-import { computed, ref, watch } from 'vue'
+import { NConfigProvider, darkTheme, } from 'naive-ui'
+import { computed } from 'vue'
 import { useTheme } from './store'
 const themeStore = useTheme()
 

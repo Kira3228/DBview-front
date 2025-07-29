@@ -1,5 +1,3 @@
-
-
 export type TSelectedFields = {
     id: boolean;
     eventType: boolean;

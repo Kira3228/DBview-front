@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Column } from '../../store/checkedFieldsStore';
+import type { Column } from '../../../store/checkedFieldsStore';
 
 defineProps<{
     selectedFields: Column[]

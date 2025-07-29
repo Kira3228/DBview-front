@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
-import { data } from '../../../pages/mock';
-import { NButton, NInput, NSlider, NSpace, NTree } from 'naive-ui';
-import { toSearchString } from '../../../pages/helpers';
+import { data } from './FilterData';
+import { NButton, NInput, NSlider, NTree } from 'naive-ui';
+import { toSearchString } from './toSearchString';
 import type { TSelectedFields } from '../../../shared/lib/types/SelectedFields';
 import SelectInput from '../../../shared/ui/Inputs/SelectInput/SelectInput.vue';
-import DateInput from '../../../shared/ui/Inputs/DateInput.vue';
-import SearchInput from '../../../shared/ui/Inputs/SearchInput.vue';
+import DateInput from '../../../shared/ui/Inputs/DateInput/DateInput.vue';
+import SearchInput from '../../../shared/ui/Inputs/SearchInput/SearchInput.vue';
 import { options } from './options';
 import { downloadChainsReport, downloadReport } from '../../event-log/api/downloadReport';
 import { useCheckedFieldStore, useReportTypeStore } from '../../../store';

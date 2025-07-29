@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { NButton, NButtonGroup } from 'naive-ui';
 import { useArchivedFileSearchStore, useArchivedFileTableStore } from '../../../store';
-import { fetchArchiveFile } from '../../../shared/api/fetchData';
 import { useDebounce } from '../../../shared/lib/debounce';
 import { SearchInput } from '../../../shared/ui';
+import { fetchArchiveFile } from '../../event-log/api/fetchArchiveFile';
 
 const archivedFileSearchStore = useArchivedFileSearchStore()
 const archivedFileTableStore = useArchivedFileTableStore()

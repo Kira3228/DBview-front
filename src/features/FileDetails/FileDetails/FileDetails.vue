@@ -1,20 +1,7 @@
-<template>
-    <n-tree v-if="treeData.length > 0" block-line :data="treeData" :default-expanded-keys="defaultExpandedKeys"
-        :selectable="false" :render-label="renderLabel" />
-    <!-- :selectable="false" :render-label="renderLabel" :render-prefix="renderPrefix" /> -->
-    <n-empty v-else description="No file hierarchy data available">
-        <template #extra>
-            <n-button size="small" @click="loadData">
-                Try to load data
-            </n-button>
-        </template>
-    </n-empty>
-</template>
-
 <script setup lang="ts">
 import { ref, computed, h } from 'vue';
-import { NTree, NTooltip, NEmpty, NButton } from 'naive-ui';
-import type { FileHierarchyMap, TreeNode } from './type';
+import { NTree } from 'naive-ui';
+import type { FileHierarchyMap, TreeNode } from '../../pages/type';
 import type { TreeRenderProps } from 'naive-ui/es/tree/src/interface';
 
 const props = defineProps<{
@@ -76,28 +63,8 @@ const renderLabel = ({ option }: TreeRenderProps) => {
         ]
     );
 };
-
-// const renderPrefix = ({ option }: TreeRenderProps) => {
-//     const node = option as TreeNode;
-//     if (!node.relationshipType) return null;
-//     return h(
-//         NTooltip,
-//         { trigger: 'hover' },
-//         {
-//             trigger: () => h(
-//                 'span',
-//                 {
-//                     style: 'background: #eee; padding: 2px 6px; border-radius: 4px; font-size: 0.8em;',
-//                 },
-//                 node.relationshipType
-//             ),
-//             default: () => `Relationship type: ${node.relationshipType}`,
-//         }
-//     );
-
-// };
-
-const loadData = () => {
-    console.log('Loading data...');
-};
 </script>
+<template>
+    <n-tree block-line :data="treeData" :default-expanded-keys="defaultExpandedKeys" :selectable="false"
+        :render-label="renderLabel" />
+</template>

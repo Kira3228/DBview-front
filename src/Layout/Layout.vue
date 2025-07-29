@@ -1,7 +1,6 @@
 <template>
     <NLayout>
         <div class="flex min-h-screen">
-
             <div class="flex flex-col h-screen sticky top-0 justify-between">
                 <NMenu class="w-56  sticky top-0" :options="menuOptions" v-model:value="activeKey"
                     @update:value="handleMenuSelect">
@@ -15,14 +14,13 @@
             </main>
         </div>
     </NLayout>
-
 </template>
 
 <script setup lang="ts">
-import { NLayout, NMenu, NSwitch } from 'naive-ui';
+import { NLayout, NMenu } from 'naive-ui';
 import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import ThemeSwitch from '../shared/ui/Inputs/ThemeSwitch.vue';
+import ThemeSwitch from '../shared/ui/Inputs/ThemeSwitch/ThemeSwitch.vue';
 
 const router = useRouter();
 const route = useRoute();
@@ -73,11 +71,6 @@ const menuOptions = [
                 label: 'Список событий',
                 key: 'report-list',
                 route: { name: 'report-list' }
-            },
-            {
-                label: 'Цепочки распространения',
-                key: 'event-chains',
-                route: { name: 'event-chains' }
             },
         ]
     },

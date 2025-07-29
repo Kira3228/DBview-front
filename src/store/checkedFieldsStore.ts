@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 import type { TreeOption } from 'naive-ui';
-import { data } from "../pages/mock";
+import { data } from "../features/event-list/Filters/FilterData";
 
 
 export type Column = {
